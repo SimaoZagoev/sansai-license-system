@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบขอใบอนุญาตประกอบกิจการ | เทศบาลตำบลสันทราย</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+  :root {
+    --primary: #1a3a6b;
+    --primary-light: #2557a7;
+    --primary-dark: #0f2347;
+    --accent: #f0a500;
+    --accent-light: #ffc844;
+    --secondary: #e8f2ff;
+    --text-dark: #1a2035;
+    --text-muted: #6b7a99;
+    --success: #0d8a4e;
+    --warning: #d48800;
+    --danger: #c0392b;
+    --white: #ffffff;
+    --gray-50: #f8f9fc;
+    --gray-100: #edf0f7;
+    --border: #d0d9ec;
+    --shadow-sm: 0 2px 8px rgba(26,58,107,0.08);
+    --shadow-md: 0 8px 32px rgba(26,58,107,0.12);
+    --shadow-lg: 0 20px 60px rgba(26,58,107,0.18);
+    --radius: 12px;
+    --radius-lg: 20px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background: var(--gray-50);
+    color: var(--text-dark);
+    margin: 0;
+  }
+
+  /* NAVBAR */
+  .navbar-main {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 60%, var(--primary-light) 100%);
+    padding: 0;
+    box-shadow: 0 4px 20px rgba(26,58,107,0.3);
+    position: sticky; top: 0; z-index: 1000;
+  }
+  .navbar-top {
+    background: rgba(255,255,255,0.08);
+    padding: 6px 0;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    border-bottom: 1px solid rgba(255,255,255,0.12);
+  }
+  .navbar-top a { color: rgba(255,255,255,0.85); text-decoration: none; }
+  .navbar-brand-area {
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 0;
+  }
+  .logo-circle {
+    width: 64px; height: 64px;
+    background: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; color: var(--primary);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+    font-weight: 700;
+    overflow: hidden;
+  }
+  .logo-circle img { width: 100%; height: 100%; object-fit: contain; }
+  .logo-text .org-name {
+    font-family: 'Prompt', sans-serif;
+    font-size: 20px; font-weight: 700;
+    color: white; line-height: 1.2;
+  }
+  .logo-text .org-sub {
+    font-size: 13px; color: rgba(255,255,255,0.75);
+    margin-top: 2px;
+  }
+  .navbar-nav-main {
+    display: flex; align-items: center; gap: 4px;
+    padding: 8px 0;
+  }
+  .navbar-nav-main a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .navbar-nav-main a:hover, .navbar-nav-main a.active {
+    background: rgba(255,255,255,0.18);
+    color: white;
+  }
+  .btn-admin-nav {
+    background: var(--accent) !important;
+    color: var(--primary-dark) !important;
+    font-weight: 700 !important;
+    padding: 8px 20px !important;
+    border-radius: 8px !important;
+  }
+  .btn-admin-nav:hover {
+    background: var(--accent-light) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(240,165,0,0.4) !important;
+  }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(160deg, var(--primary-dark) 0%, var(--primary) 50%, #1e5ab5 100%);
+    padding: 72px 0 80px;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(240,165,0,0.2);
+    border: 1px solid rgba(240,165,0,0.4);
+    color: var(--accent-light);
+    padding: 6px 16px; border-radius: 50px;
+    font-size: 13px; font-weight: 600;
+    margin-bottom: 20px;
+    animation: fadeUp 0.6s ease;
+  }
+  .hero h1 {
+    font-family: 'Prompt', sans-serif;
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700; color: white;
+    line-height: 1.25; margin-bottom: 16px;
+    animation: fadeUp 0.7s ease;
+  }
+  .hero h1 span { color: var(--accent-light); }
+  .hero p {
+    font-size: 17px; color: rgba(255,255,255,0.8);
+    max-width: 580px; line-height: 1.7; margin-bottom: 32px;
+    animation: fadeUp 0.8s ease;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; animation: fadeUp 0.9s ease; }
+  .btn-hero-primary {
+    background: var(--accent);
+    color: var(--primary-dark);
+    border: none; padding: 14px 32px;
+    border-radius: 10px; font-family: 'Sarabun', sans-serif;
+    font-size: 16px; font-weight: 700;
+    cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.25s;
+    box-shadow: 0 6px 24px rgba(240,165,0,0.4);
+  }
+  .btn-hero-primary:hover {
+    background: var(--accent-light);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 32px rgba(240,165,0,0.5);
+    color: var(--primary-dark);
+  }
+  .btn-hero-secondary {
+    background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    color: white; padding: 14px 28px;
+    border-radius: 10px; font-family: 'Sarabun', sans-serif;
+    font-size: 16px; font-weight: 600;
+    cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.25s;
+  }
+  .btn-hero-secondary:hover {
+    background: rgba(255,255,255,0.22);
+    color: white; transform: translateY(-1px);
+  }
+  .hero-stats {
+    display: flex; gap: 32px; margin-top: 48px;
+    animation: fadeUp 1s ease;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .num {
+    font-family: 'Prompt', sans-serif;
+    font-size: 32px; font-weight: 700; color: var(--accent-light);
+    line-height: 1;
+  }
+  .hero-stat .label { font-size: 13px; color: rgba(255,255,255,0.65); margin-top: 4px; }
+  .hero-visual {
+    position: relative;
+    animation: fadeUp 0.8s ease;
+  }
+  .hero-card {
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px; padding: 28px;
+    color: white;
+  }
+  .hero-card .card-title {
+    font-weight: 700; font-size: 16px; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .step-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .step-item:last-child { border-bottom: none; }
+  .step-num {
+    width: 28px; height: 28px;
+    background: var(--accent);
+    color: var(--primary-dark);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; flex-shrink: 0;
+  }
+  .step-text { font-size: 14px; line-height: 1.5; color: rgba(255,255,255,0.9); }
+  .step-sub { font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+  /* STATUS SEARCH */
+  .status-search-section {
+    background: white;
+    border-bottom: 1px solid var(--border);
+    padding: 28px 0;
+    box-shadow: var(--shadow-sm);
+  }
+  .search-wrapper {
+    display: flex; gap: 12px; max-width: 720px; margin: 0 auto;
+    padding: 0 16px;
+  }
+  .search-input {
+    flex: 1;
+    border: 2px solid var(--border);
+    border-radius: 10px; padding: 12px 18px;
+    font-family: 'Sarabun', sans-serif; font-size: 15px;
+    outline: none; transition: border-color 0.2s;
+    color: var(--text-dark);
+  }
+  .search-input:focus { border-color: var(--primary-light); }
+  .btn-search {
+    background: var(--primary);
+    color: white; border: none; padding: 12px 24px;
+    border-radius: 10px; font-family: 'Sarabun', sans-serif;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .btn-search:hover { background: var(--primary-light); transform: translateY(-1px); }
+
+  /* STATUS RESULT */
+  .status-result {
+    max-width: 720px; margin: 16px auto 0; padding: 0 16px;
+    display: none;
+  }
+  .status-card {
+    border-radius: var(--radius); border: 1px solid var(--border);
+    overflow: hidden; box-shadow: var(--shadow-sm);
+  }
+  .status-card-header {
+    background: var(--primary); color: white;
+    padding: 16px 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .status-card-body { padding: 20px; background: white; }
+  .status-timeline { position: relative; padding-left: 28px; }
+  .status-timeline::before {
+    content: ''; position: absolute; left: 10px; top: 0; bottom: 0;
+    width: 2px; background: var(--border);
+  }
+  .timeline-step {
+    position: relative; margin-bottom: 20px;
+    display: flex; align-items: flex-start; gap: 12px;
+  }
+  .timeline-dot {
+    position: absolute; left: -28px; top: 2px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--border); border: 3px solid white;
+    box-shadow: 0 0 0 2px var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; flex-shrink: 0;
+  }
+  .timeline-dot.done { background: var(--success); box-shadow: 0 0 0 2px var(--success); }
+  .timeline-dot.current { background: var(--primary); box-shadow: 0 0 0 2px var(--primary); animation: pulse 1.5s infinite; }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 2px var(--primary); }
+    50% { box-shadow: 0 0 0 5px rgba(37,87,167,0.3); }
+  }
+  .timeline-label { font-weight: 600; font-size: 14px; }
+  .timeline-date { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* CARDS SECTION */
+  .cards-section { padding: 64px 0; }
+  .section-title {
+    font-family: 'Prompt', sans-serif;
+    font-size: 28px; font-weight: 700; color: var(--primary-dark);
+    margin-bottom: 8px;
+  }
+  .section-sub { color: var(--text-muted); font-size: 15px; margin-bottom: 40px; }
+  .feature-card {
+    background: white; border-radius: var(--radius-lg);
+    padding: 32px 28px; border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s; height: 100%;
+    cursor: pointer; text-decoration: none; color: inherit;
+    display: block;
+  }
+  .feature-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-4px);
+    border-color: var(--primary-light);
+    color: inherit;
+  }
+  .feature-icon {
+    width: 60px; height: 60px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; margin-bottom: 20px;
+  }
+  .feature-icon.blue { background: var(--secondary); color: var(--primary); }
+  .feature-icon.gold { background: #fff8e6; color: var(--warning); }
+  .feature-icon.green { background: #e8f5ee; color: var(--success); }
+  .feature-icon.purple { background: #f0eeff; color: #6b4ee6; }
+  .feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+  .feature-card p { font-size: 14px; color: var(--text-muted); line-height: 1.65; margin: 0; }
+  .feature-arrow {
+    margin-top: 20px; color: var(--primary-light);
+    font-size: 20px; transition: transform 0.2s;
+  }
+  .feature-card:hover .feature-arrow { transform: translateX(4px); }
+
+  /* NOTICE BANNER */
+  .notice-banner {
+    background: linear-gradient(135deg, #fff8e6, #fffdf0);
+    border: 1px solid #fcd97d;
+    border-radius: var(--radius); padding: 20px 24px;
+    display: flex; align-items: flex-start; gap: 16px; margin-bottom: 32px;
+  }
+  .notice-banner .icon { font-size: 28px; flex-shrink: 0; }
+  .notice-banner h4 { font-weight: 700; color: var(--warning); margin-bottom: 4px; font-size: 15px; }
+  .notice-banner p { font-size: 13.5px; color: #6b5000; margin: 0; }
+
+  /* FOOTER */
+  .footer {
+    background: var(--primary-dark);
+    color: rgba(255,255,255,0.7);
+    padding: 48px 0 24px;
+  }
+  .footer h5 {
+    color: white; font-weight: 700; margin-bottom: 16px;
+    font-size: 15px;
+  }
+  .footer p, .footer a { font-size: 13.5px; line-height: 1.8; }
+  .footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+  .footer a:hover { color: var(--accent-light); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 32px; padding-top: 20px;
+    text-align: center; font-size: 13px; color: rgba(255,255,255,0.4);
+  }
+
+  /* BADGE STATUS */
+  .badge-status {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 50px;
+    font-size: 13px; font-weight: 600;
+  }
+  .badge-waiting { background: #fff3cd; color: #856404; }
+  .badge-approved { background: #d1e7dd; color: #0f5132; }
+  .badge-rejected { background: #f8d7da; color: #842029; }
+  .badge-processing { background: #cfe2ff; color: #084298; }
+  .badge-more-docs { background: #fff0e6; color: #7c3000; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .hero { padding: 48px 0 56px; }
+    .hero-stats { gap: 20px; }
+    .hero-stat .num { font-size: 24px; }
+    .navbar-brand-area { gap: 10px; }
+    .logo-circle { width: 48px; height: 48px; font-size: 20px; }
+    .logo-text .org-name { font-size: 16px; }
+    .navbar-nav-main { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar-main">
+  <div class="navbar-top">
+    <div class="container d-flex justify-content-between">
+      <span><i class="bi bi-geo-alt-fill me-1"></i>ตำบลสันทราย อำเภอเมืองเชียงราย จังหวัดเชียงราย</span>
+      <span>
+        <i class="bi bi-telephone-fill me-1"></i>053-XXX-XXX &nbsp;|&nbsp;
+        <i class="bi bi-clock-fill me-1"></i>จ-ศ 08:30-16:30 น.
+      </span>
+    </div>
+  </div>
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+      <div class="navbar-brand-area">
+        <div class="logo-circle">
+          <!-- ใส่ Logo เทศบาล: <img src="logo.png" alt="logo"> -->
+          <i class="bi bi-building-fill"></i>
+        </div>
+        <div class="logo-text">
+          <div class="org-name">เทศบาลตำบลสันทราย</div>
+          <div class="org-sub">ระบบขอใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ</div>
+        </div>
+      </div>
+      <div class="navbar-nav-main">
+        <a href="index.html" class="active"><i class="bi bi-house-fill"></i> หน้าหลัก</a>
+        <a href="apply.html"><i class="bi bi-file-earmark-plus-fill"></i> ยื่นคำขอ</a>
+        <a href="status.html"><i class="bi bi-search"></i> ตรวจสอบสถานะ</a>
+        <a href="admin.html" class="btn-admin-nav"><i class="bi bi-shield-lock-fill"></i> เจ้าหน้าที่</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-7">
+        <div class="hero-badge">
+          <i class="bi bi-shield-check-fill"></i>
+          ระบบดิจิทัล พ.ศ. 2568 — Paperless & Smart Notification
+        </div>
+        <h1>ยื่นขอใบอนุญาต<br>ประกอบกิจการ<span>ออนไลน์</span></h1>
+        <p>ระบบยื่นคำขอใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ เทศบาลตำบลสันทราย แบบดิจิทัล ลดขั้นตอน รวดเร็ว พร้อมติดตามสถานะแบบ Real-time และรับแจ้งเตือนผ่าน LINE</p>
+        <div class="hero-actions">
+          <a href="apply.html" class="btn-hero-primary">
+            <i class="bi bi-file-earmark-plus-fill"></i> ยื่นคำขอใหม่
+          </a>
+          <a href="status.html" class="btn-hero-secondary">
+            <i class="bi bi-search"></i> ตรวจสอบสถานะ
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="num">247</div>
+            <div class="label">คำขอทั้งหมด</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">189</div>
+            <div class="label">อนุมัติแล้ว</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">14</div>
+            <div class="label">รอดำเนินการ</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">&lt;3 วัน</div>
+            <div class="label">เวลาเฉลี่ย</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="hero-visual">
+          <div class="hero-card">
+            <div class="card-title"><i class="bi bi-list-check"></i> ขั้นตอนการขอใบอนุญาต</div>
+            <div class="step-item">
+              <div class="step-num">1</div>
+              <div>
+                <div class="step-text">กรอกแบบคำขอออนไลน์</div>
+                <div class="step-sub">พร้อมแนบเอกสารประกอบ</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">2</div>
+              <div>
+                <div class="step-text">รับเลขที่คำขอทันที</div>
+                <div class="step-sub">แจ้งเตือนผ่าน LINE อัตโนมัติ</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">3</div>
+              <div>
+                <div class="step-text">เจ้าหน้าที่ตรวจสอบเอกสาร</div>
+                <div class="step-sub">ใช้เวลา 1-3 วันทำการ</div>
+              </div>
+            </div>
+            <div class="step-item">
+              <div class="step-num">4</div>
+              <div>
+                <div class="step-text">รับใบอนุญาต</div>
+                <div class="step-sub">มารับที่สำนักงานหรือแบบดิจิทัล</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK STATUS SEARCH -->
+<section class="status-search-section">
+  <div class="container">
+    <div class="text-center mb-3">
+      <strong style="color:var(--primary)"><i class="bi bi-search me-2"></i>ตรวจสอบสถานะคำขอ</strong>
+      <span class="text-muted ms-2" style="font-size:14px">พิมพ์เลขบัตรประชาชน หรือ เลขที่คำขอ</span>
+    </div>
+    <div class="search-wrapper">
+      <input type="text" id="quickSearch" class="search-input" placeholder="เช่น REQ-68001 หรือ 3XXXXXXXXXXXX (13 หลัก)" maxlength="20">
+      <button class="btn-search" onclick="quickSearchStatus()">
+        <i class="bi bi-search"></i> ตรวจสอบ
+      </button>
+    </div>
+    <div class="status-result" id="statusResult"></div>
+  </div>
+</section>
+
+<!-- MAIN FEATURES -->
+<section class="cards-section">
+  <div class="container">
+    <div class="notice-banner">
+      <div class="icon">⚠️</div>
+      <div>
+        <h4>กิจการที่ต้องผ่านการประชาคมหมู่บ้านก่อน</h4>
+        <p>กิจการบางประเภท เช่น การเลี้ยงสุกร การสีข้าว การเลื่อยไม้ เป็นต้น จำเป็นต้องผ่านการประชาคมหมู่บ้านก่อนยื่นคำขอ กรุณาตรวจสอบประเภทกิจการของท่านในแบบคำขอ หรือสอบถามเจ้าหน้าที่ โทร. 053-XXX-XXX</p>
+      </div>
+    </div>
+    <div class="text-center">
+      <div class="section-title">บริการของเรา</div>
+      <div class="section-sub">ระบบครบวงจรสำหรับผู้ประกอบการและเจ้าหน้าที่</div>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <a href="apply.html" class="feature-card">
+          <div class="feature-icon blue"><i class="bi bi-file-earmark-plus-fill"></i></div>
+          <h3>ยื่นคำขอใหม่</h3>
+          <p>กรอกแบบคำขอรับ/ต่อใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ พร้อมอัปโหลดเอกสาร</p>
+          <div class="feature-arrow"><i class="bi bi-arrow-right-circle-fill"></i></div>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <a href="status.html" class="feature-card">
+          <div class="feature-icon gold"><i class="bi bi-clock-history"></i></div>
+          <h3>ติดตามสถานะ</h3>
+          <p>ตรวจสอบความคืบหน้าของคำขอ ดูประวัติย้อนหลัง และรับแจ้งเตือนเมื่อมีการเปลี่ยนสถานะ</p>
+          <div class="feature-arrow"><i class="bi bi-arrow-right-circle-fill"></i></div>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <a href="renew.html" class="feature-card">
+          <div class="feature-icon green"><i class="bi bi-arrow-repeat"></i></div>
+          <h3>ต่ออายุใบอนุญาต</h3>
+          <p>ต่ออายุใบอนุญาตที่กำลังจะหมดอายุ ระบบจะแจ้งเตือนล่วงหน้า 90 วันผ่าน LINE</p>
+          <div class="feature-arrow"><i class="bi bi-arrow-right-circle-fill"></i></div>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <a href="admin.html" class="feature-card">
+          <div class="feature-icon purple"><i class="bi bi-shield-lock-fill"></i></div>
+          <h3>สำหรับเจ้าหน้าที่</h3>
+          <p>Dashboard จัดการคำขอ เปลี่ยนสถานะ ออก Report และส่ง LINE Notification</p>
+          <div class="feature-arrow"><i class="bi bi-arrow-right-circle-fill"></i></div>
+        </a>
+      </div>
+    </div>
+
+    <!-- INFO ROW -->
+    <div class="row g-4 mt-4">
+      <div class="col-md-4">
+        <div style="background:white;border-radius:var(--radius);padding:24px;border:1px solid var(--border);height:100%">
+          <div style="font-size:28px;margin-bottom:12px">📱</div>
+          <h5 style="font-weight:700;color:var(--primary-dark)">แจ้งเตือนผ่าน LINE</h5>
+          <p style="font-size:14px;color:var(--text-muted);line-height:1.7">ระบบส่ง LINE Flex Message อัตโนมัติ เมื่อมีคำขอใหม่ เปลี่ยนสถานะ หรือใบอนุญาตใกล้หมดอายุ</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="background:white;border-radius:var(--radius);padding:24px;border:1px solid var(--border);height:100%">
+          <div style="font-size:28px;margin-bottom:12px">📄</div>
+          <h5 style="font-weight:700;color:var(--primary-dark)">สร้างเอกสารอัตโนมัติ</h5>
+          <p style="font-size:14px;color:var(--text-muted);line-height:1.7">ดึงข้อมูลไปสร้างใบอนุญาตและรายงานสรุปแบบอัตโนมัติ รองรับ PDF/Excel</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div style="background:white;border-radius:var(--radius);padding:24px;border:1px solid var(--border);height:100%">
+          <div style="font-size:28px;margin-bottom:12px">📊</div>
+          <h5 style="font-weight:700;color:var(--primary-dark)">รายงานวิเคราะห์</h5>
+          <p style="font-size:14px;color:var(--text-muted);line-height:1.7">Dashboard สำหรับผู้บริหาร วิเคราะห์แนวโน้ม Export Excel/PDF กรองตามเดือน ปี ประเภทกิจการ</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:44px;height:44px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px">🏛️</div>
+          <div>
+            <div style="color:white;font-weight:700;font-size:15px">เทศบาลตำบลสันทราย</div>
+            <div style="font-size:12px">กองสาธารณสุขและสิ่งแวดล้อม</div>
+          </div>
+        </div>
+        <p style="font-size:13.5px;line-height:1.8">ตำบลสันทราย อำเภอเมืองเชียงราย<br>จังหวัดเชียงราย 57000</p>
+      </div>
+      <div class="col-md-2">
+        <h5>เมนูหลัก</h5>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <a href="index.html">หน้าหลัก</a>
+          <a href="apply.html">ยื่นคำขอ</a>
+          <a href="status.html">ตรวจสอบสถานะ</a>
+          <a href="renew.html">ต่ออายุ</a>
+          <a href="admin.html">สำหรับเจ้าหน้าที่</a>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <h5>เอกสารที่ต้องใช้</h5>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:13px">
+          <span>• สำเนาบัตรประชาชน</span>
+          <span>• สำเนาทะเบียนบ้าน</span>
+          <span>• สำเนาใบอนุญาตเดิม (กรณีต่ออายุ)</span>
+          <span>• หนังสือมอบอำนาจ (ถ้ามี)</span>
+          <span>• เอกสารนิติบุคคล (ถ้ามี)</span>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <h5>ติดต่อเรา</h5>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13.5px">
+          <div><i class="bi bi-telephone-fill me-2" style="color:var(--accent-light)"></i>053-XXX-XXX</div>
+          <div><i class="bi bi-envelope-fill me-2" style="color:var(--accent-light)"></i>health@sansai.go.th</div>
+          <div><i class="bi bi-clock-fill me-2" style="color:var(--accent-light)"></i>จันทร์-ศุกร์ 08:30–16:30</div>
+          <div><i class="bi bi-line me-2" style="color:var(--accent-light)"></i>LINE OA: @sansai-health</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2568 เทศบาลตำบลสันทราย — ระบบขอใบอนุญาตประกอบกิจการที่เป็นอันตรายต่อสุขภาพ v1.0
+    </div>
+  </div>
+</footer>
+
+<script>
+// Demo data
+const API_URL = 'https://script.google.com/macros/s/AKfycbxA6byQdKbR8NOvWXiomgEsVZW_EvGUmXXk0VCjK2CiDwF14kfU0qaFVaVjeuFb0Ne7/exec';
+const demoRequests = {
+  'REQ-68001': {
+    id: 'REQ-68001', name: 'นายสมชาย ใจดี',
+    business: 'สมชาย ฟาร์มหมู', type: 'การเลี้ยงสุกร',
+    status: 'approved', submitted: '15 มิ.ย. 2568',
+    steps: [
+      { label: 'รับคำขอเข้าระบบ', date: '15 มิ.ย. 68 09:12', done: true },
+      { label: 'ตรวจสอบเอกสาร', date: '16 มิ.ย. 68 10:30', done: true },
+      { label: 'ตรวจสถานประกอบการ', date: '18 มิ.ย. 68 14:00', done: true },
+      { label: 'อนุมัติใบอนุญาต', date: '20 มิ.ย. 68 09:00', done: true, current: false },
+    ]
+  },
+  'REQ-68002': {
+    id: 'REQ-68002', name: 'นางสาวมาลี สวัสดี',
+    business: 'ร้านเสริมสวยมาลี', type: 'กิจการเสริมสวย',
+    status: 'processing', submitted: '18 มิ.ย. 2568',
+    steps: [
+      { label: 'รับคำขอเข้าระบบ', date: '18 มิ.ย. 68 11:05', done: true },
+      { label: 'ตรวจสอบเอกสาร', date: '19 มิ.ย. 68 09:20', done: true },
+      { label: 'ตรวจสถานประกอบการ', date: '', done: false, current: true },
+      { label: 'อนุมัติใบอนุญาต', date: '', done: false },
+    ]
+  }
+};
+
+async function quickSearchStatus() {
+  const q = document.getElementById('quickSearch').value.trim().toUpperCase();
+  const resultDiv = document.getElementById('statusResult');
+
+  if (!q) { 
+    resultDiv.style.display = 'none'; 
+    return; 
+  }
+
+  // แสดง Loading
+  resultDiv.style.display = 'block';
+  resultDiv.innerHTML = `
+    <div style="background:white;border:1px solid var(--border);
+                border-radius:12px;padding:24px;text-align:center">
+      <div style="font-size:24px;margin-bottom:8px">⏳</div>
+      <div style="color:var(--text-muted)">กำลังค้นหาข้อมูล...</div>
+    </div>`;
+
+  try {
+    const response = await fetch(
+      `${API_URL}?action=checkStatus&id=${encodeURIComponent(q)}`
+    );
+    const data = await response.json();
+
+    if (!data.found) {
+      resultDiv.innerHTML = `
+        <div style="background:white;border:1px solid #f8d7da;border-radius:12px;
+                    padding:20px;color:#842029;display:flex;align-items:center;gap:12px">
+          <i class="bi bi-exclamation-triangle-fill" style="font-size:24px"></i>
+          <div>
+            <strong>ไม่พบข้อมูล</strong><br>
+            <span style="font-size:14px">
+              กรุณาตรวจสอบเลขที่คำขอหรือเลขบัตรประชาชนอีกครั้ง
+            </span>
+          </div>
+        </div>`;
+      return;
+    }
+
+    // แสดงผลสถานะ
+    const statusMap = {
+      'รอตรวจสอบ':      { cls:'badge-waiting',    emoji:'⏳' },
+      'กำลังดำเนินการ': { cls:'badge-processing',  emoji:'🔄' },
+      'ขอเอกสารเพิ่ม':  { cls:'badge-more-docs',   emoji:'📎' },
+      'อนุมัติแล้ว':    { cls:'badge-approved',    emoji:'✅' },
+      'ไม่อนุมัติ':     { cls:'badge-rejected',    emoji:'❌' },
+    };
+    const s = statusMap[data.status] || { cls:'badge-waiting', emoji:'⏳' };
+
+    resultDiv.innerHTML = `
+      <div class="status-card">
+        <div class="status-card-header">
+          <div>
+            <strong>${data.reqNo}</strong> — ${data.name}
+            <div style="font-size:13px;opacity:0.8;margin-top:2px">
+              ${data.bizName} | ${data.bizType}
+            </div>
+          </div>
+          <span class="badge-status ${s.cls}">
+            ${s.emoji} ${data.status}
+          </span>
+        </div>
+        <div class="status-card-body">
+          <div style="font-size:14px;line-height:1.9">
+            📅 วันที่ยื่น: <strong>${data.date}</strong><br>
+            ${data.licenseNo 
+              ? `📋 เลขใบอนุญาต: <strong>${data.licenseNo}</strong><br>` 
+              : ''}
+            ${data.expiry 
+              ? `⏰ หมดอายุ: <strong>${data.expiry}</strong><br>` 
+              : ''}
+            ${data.note 
+              ? `📌 หมายเหตุ: ${data.note}` 
+              : ''}
+          </div>
+        </div>
+      </div>`;
+
+  } catch (error) {
+    resultDiv.innerHTML = `
+      <div style="background:white;border:1px solid #f8d7da;border-radius:12px;
+                  padding:20px;color:#842029">
+        ❌ เกิดข้อผิดพลาดในการค้นหา กรุณาลองใหม่อีกครั้ง
+      </div>`;
+  }
+}
+
+document.getElementById('quickSearch').addEventListener('keypress', e => {
+  if (e.key === 'Enter') quickSearchStatus();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | เทศบาลตำบลสันทราย</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.bootstrap5.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<style>
+:root {
+  --primary: #1a3a6b; --primary-light: #2557a7; --primary-dark: #0f2347;
+  --accent: #f0a500; --secondary: #e8f2ff;
+  --text-dark: #1a2035; --text-muted: #6b7a99;
+  --success: #0d8a4e; --warning: #d48800; --danger: #c0392b;
+  --white: #ffffff; --gray-50: #f8f9fc;
+  --border: #d0d9ec; --shadow-sm: 0 2px 8px rgba(26,58,107,0.08);
+  --shadow-md: 0 8px 32px rgba(26,58,107,0.12);
+  --sidebar-w: 260px; --radius: 12px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Sarabun', sans-serif; background: var(--gray-50); color: var(--text-dark); }
+
+/* SIDEBAR */
+.sidebar {
+  width: var(--sidebar-w); height: 100vh;
+  background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary) 100%);
+  position: fixed; left: 0; top: 0; z-index: 100;
+  display: flex; flex-direction: column;
+  box-shadow: 4px 0 20px rgba(26,58,107,0.2);
+  overflow-y: auto;
+}
+.sidebar-brand {
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; gap: 12px;
+}
+.sidebar-logo {
+  width: 44px; height: 44px; background: white; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; color: var(--primary); flex-shrink: 0;
+}
+.sidebar-brand-text .name { font-family:'Prompt',sans-serif; font-size:14px; font-weight:700; color:white; line-height:1.2; }
+.sidebar-brand-text .sub { font-size:11px; color:rgba(255,255,255,0.6); margin-top:2px; }
+.sidebar-nav { padding: 16px 12px; flex: 1; }
+.nav-section-label { font-size:11px; font-weight:700; color:rgba(255,255,255,0.4); text-transform:uppercase; letter-spacing:0.8px; padding:8px 8px 4px; margin-top:8px; }
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: 8px; margin-bottom: 2px;
+  color: rgba(255,255,255,0.75); text-decoration: none; font-size: 14px; font-weight: 500;
+  cursor: pointer; border: none; background: none; width: 100%; text-align: left;
+  transition: all 0.2s;
+}
+.nav-item:hover { background: rgba(255,255,255,0.1); color: white; }
+.nav-item.active { background: rgba(255,255,255,0.15); color: white; font-weight: 600; }
+.nav-item .badge-nav { background: var(--accent); color: var(--primary-dark); font-size:11px; padding:2px 8px; border-radius:10px; font-weight:700; margin-left:auto; }
+.sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.1); }
+.sidebar-footer .user-info { display:flex; align-items:center; gap:10px; }
+.user-avatar { width:36px; height:36px; background:var(--accent); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.user-name { font-size:13px; color:white; font-weight:600; }
+.user-role { font-size:11px; color:rgba(255,255,255,0.55); }
+
+/* MAIN CONTENT */
+.main-content { margin-left: var(--sidebar-w); min-height: 100vh; }
+.top-bar {
+  background: white; border-bottom: 1px solid var(--border);
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: var(--shadow-sm);
+}
+.top-bar-title { font-family:'Prompt',sans-serif; font-size:18px; font-weight:700; color:var(--primary-dark); }
+.top-bar-actions { display:flex; align-items:center; gap:10px; }
+.btn-topbar { padding:8px 16px; border-radius:8px; font-family:'Sarabun',sans-serif; font-size:13px; font-weight:600; border:none; cursor:pointer; display:flex; align-items:center; gap:6px; transition:all 0.2s; }
+.btn-primary-sm { background:var(--primary); color:white; }
+.btn-primary-sm:hover { background:var(--primary-light); }
+.btn-outline-sm { background:white; border:1.5px solid var(--border); color:var(--text-dark); }
+.btn-outline-sm:hover { background:var(--gray-50); }
+.btn-line { background:#06C755; color:white; }
+.btn-line:hover { background:#05b04c; }
+.btn-export { background:#0d8a4e; color:white; }
+.btn-export:hover { background:#0a7040; }
+
+/* PAGE CONTENT */
+.page-content { padding: 24px; }
+
+/* STAT CARDS */
+.stat-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:16px; margin-bottom:24px; }
+.stat-card { background:white; border-radius:var(--radius); border:1px solid var(--border); padding:20px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden; transition:all 0.2s; cursor:pointer; }
+.stat-card:hover { box-shadow:var(--shadow-md); transform:translateY(-2px); }
+.stat-card::after { content:''; position:absolute; top:0; left:0; width:4px; height:100%; }
+.stat-card.blue::after { background:var(--primary); }
+.stat-card.yellow::after { background:var(--accent); }
+.stat-card.green::after { background:var(--success); }
+.stat-card.red::after { background:var(--danger); }
+.stat-card.orange::after { background:#e67e22; }
+.stat-num { font-family:'Prompt',sans-serif; font-size:32px; font-weight:700; line-height:1; }
+.stat-label { font-size:13px; color:var(--text-muted); margin-top:4px; }
+.stat-icon { position:absolute; right:16px; top:50%; transform:translateY(-50%); font-size:36px; opacity:0.12; }
+.stat-trend { font-size:12px; margin-top:8px; color:var(--success); }
+
+/* FILTER BAR */
+.filter-bar { background:white; border-radius:var(--radius); border:1px solid var(--border); padding:16px 20px; margin-bottom:20px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; box-shadow:var(--shadow-sm); }
+.filter-select { border:1.5px solid var(--border); border-radius:8px; padding:8px 12px; font-family:'Sarabun',sans-serif; font-size:13.5px; color:var(--text-dark); min-width:140px; }
+.filter-input { border:1.5px solid var(--border); border-radius:8px; padding:8px 12px; font-family:'Sarabun',sans-serif; font-size:13.5px; color:var(--text-dark); }
+.filter-select:focus, .filter-input:focus { outline:none; border-color:var(--primary-light); }
+
+/* TABLE */
+.table-card { background:white; border-radius:var(--radius); border:1px solid var(--border); box-shadow:var(--shadow-sm); overflow:hidden; }
+.table-header { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg,var(--secondary),#f0f6ff); }
+.table-title { font-weight:700; color:var(--primary-dark); font-size:15px; }
+
+/* STATUS BADGES */
+.badge-status { display:inline-flex; align-items:center; gap:5px; padding:4px 12px; border-radius:50px; font-size:12px; font-weight:600; white-space:nowrap; }
+.bs-waiting { background:#fff3cd; color:#856404; }
+.bs-approved { background:#d1e7dd; color:#0f5132; }
+.bs-rejected { background:#f8d7da; color:#842029; }
+.bs-processing { background:#cfe2ff; color:#084298; }
+.bs-docs { background:#fff0e6; color:#7c3000; }
+.bs-expired-soon { background:#f5e6ff; color:#5b2fa0; }
+
+/* TABLE STYLES */
+table.dataTable thead th { background:var(--gray-50)!important; font-weight:700; color:var(--primary-dark); font-family:'Sarabun',sans-serif; font-size:13px; border-bottom:2px solid var(--border)!important; }
+table.dataTable tbody td { font-family:'Sarabun',sans-serif; font-size:13.5px; vertical-align:middle; padding:10px 12px!important; border-bottom:1px solid var(--gray-100)!important; }
+table.dataTable tbody tr:hover { background:var(--secondary)!important; }
+
+/* MODAL */
+.modal-header { background:linear-gradient(135deg,var(--primary-dark),var(--primary)); color:white; }
+.modal-header .btn-close { filter:invert(1); }
+.modal-title { font-family:'Prompt',sans-serif; font-weight:700; }
+.detail-label { font-size:12px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+.detail-value { font-size:14px; color:var(--text-dark); font-weight:500; }
+.section-divider { border:none; border-top:1px solid var(--border); margin:16px 0; }
+
+/* TIMELINE in modal */
+.status-timeline-modal { position:relative; padding-left:24px; }
+.status-timeline-modal::before { content:''; position:absolute; left:8px; top:0; bottom:0; width:2px; background:var(--border); }
+.timeline-entry { position:relative; margin-bottom:16px; }
+.timeline-entry::before { content:''; position:absolute; left:-20px; top:4px; width:12px; height:12px; border-radius:50%; background:var(--success); border:2px solid white; box-shadow:0 0 0 2px var(--success); }
+.timeline-entry .t-date { font-size:11px; color:var(--text-muted); }
+.timeline-entry .t-label { font-size:13.5px; font-weight:600; }
+.timeline-entry .t-note { font-size:13px; color:var(--text-muted); margin-top:2px; }
+
+/* QUICK STATUS */
+.status-btn-group { display:flex; flex-wrap:wrap; gap:8px; }
+.status-option { border:2px solid var(--border); border-radius:8px; padding:8px 14px; cursor:pointer; font-size:13.5px; font-weight:600; background:white; transition:all 0.2s; }
+.status-option:hover { border-color:var(--primary); background:var(--secondary); }
+.status-option.selected { border-color:var(--primary); background:var(--primary); color:white; }
+
+/* EXPIRY WARNING */
+.expiry-warning { background:#f5e6ff; border:1px solid #c4a0ff; border-radius:8px; padding:12px 16px; font-size:13.5px; color:#5b2fa0; display:flex; gap:10px; align-items:flex-start; }
+
+/* CHART placeholder */
+.chart-card { background:white; border-radius:var(--radius); border:1px solid var(--border); padding:20px; box-shadow:var(--shadow-sm); }
+.chart-title { font-weight:700; color:var(--primary-dark); margin-bottom:16px; font-size:15px; }
+
+/* RESPONSIVE */
+@media(max-width:1100px) {
+  .stat-grid { grid-template-columns:repeat(2,1fr); }
+  .sidebar { transform:translateX(-100%); transition:transform 0.3s; }
+  .sidebar.open { transform:translateX(0); }
+  .main-content { margin-left:0; }
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="sidebar-logo"><i class="bi bi-building-fill"></i></div>
+    <div class="sidebar-brand-text">
+      <div class="name">เทศบาลตำบลสันทราย</div>
+      <div class="sub">ระบบใบอนุญาตกิจการ</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">หน้าหลัก</div>
+    <button class="nav-item active" onclick="showPage('dashboard')">
+      <i class="bi bi-speedometer2"></i> Dashboard
+    </button>
+    <button class="nav-item" onclick="showPage('requests')">
+      <i class="bi bi-file-earmark-text"></i> คำขอทั้งหมด
+      <span class="badge-nav" id="navBadgePending">14</span>
+    </button>
+
+    <div class="nav-section-label">จัดการ</div>
+    <button class="nav-item" onclick="showPage('approved')">
+      <i class="bi bi-check-circle-fill" style="color:#4ade80"></i> อนุมัติแล้ว
+    </button>
+    <button class="nav-item" onclick="showPage('expiring')">
+      <i class="bi bi-exclamation-triangle-fill" style="color:#fbbf24"></i> ใกล้หมดอายุ
+      <span class="badge-nav" style="background:#e67e22">8</span>
+    </button>
+    <button class="nav-item" onclick="showPage('line')">
+      <i class="bi bi-chat-square-dots-fill" style="color:#06C755"></i> LINE Notification
+    </button>
+
+    <div class="nav-section-label">รายงาน</div>
+    <button class="nav-item" onclick="showPage('report')">
+      <i class="bi bi-bar-chart-fill"></i> รายงานสรุป
+    </button>
+    <button class="nav-item" onclick="showPage('export')">
+      <i class="bi bi-download"></i> Export ข้อมูล
+    </button>
+
+    <div class="nav-section-label">ระบบ</div>
+    <button class="nav-item" onclick="window.open('index.html')">
+      <i class="bi bi-globe"></i> หน้าเว็บประชาชน
+    </button>
+    <button class="nav-item" onclick="showPage('settings')">
+      <i class="bi bi-gear-fill"></i> ตั้งค่าระบบ
+    </button>
+    <button class="nav-item" onclick="window.location.href='index.html'">
+      <i class="bi bi-box-arrow-left"></i> ออกจากระบบ
+    </button>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar">👨‍💼</div>
+      <div>
+        <div class="user-name">นายสมศักดิ์ เจ้าหน้าที่</div>
+        <div class="user-role">กองสาธารณสุข</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main-content">
+  <div class="top-bar">
+    <div class="top-bar-title" id="pageTitle"><i class="bi bi-speedometer2 me-2"></i>Dashboard</div>
+    <div class="top-bar-actions">
+      <button class="btn-topbar btn-line" onclick="showLineModal()">
+        <i class="bi bi-chat-square-dots-fill"></i> ส่ง LINE
+      </button>
+      <button class="btn-topbar btn-export" onclick="exportData()">
+        <i class="bi bi-download"></i> Export
+      </button>
+      <button class="btn-topbar btn-primary-sm" onclick="window.open('apply.html')">
+        <i class="bi bi-plus-lg"></i> คำขอใหม่
+      </button>
+    </div>
+  </div>
+
+  <div class="page-content">
+    
+    <!-- =================== DASHBOARD =================== -->
+    <div id="page-dashboard">
+      <!-- STAT CARDS -->
+      <div class="stat-grid">
+        <div class="stat-card blue" onclick="showPage('requests')">
+          <div class="stat-num" style="color:var(--primary)">247</div>
+          <div class="stat-label">คำขอทั้งหมด (ปีนี้)</div>
+          <div class="stat-trend"><i class="bi bi-arrow-up-right"></i> +12 จากเดือนก่อน</div>
+          <div class="stat-icon"><i class="bi bi-files"></i></div>
+        </div>
+        <div class="stat-card yellow" onclick="filterByStatus('waiting')">
+          <div class="stat-num" style="color:var(--warning)">14</div>
+          <div class="stat-label">รอตรวจสอบ</div>
+          <div class="stat-trend" style="color:var(--warning)"><i class="bi bi-clock"></i> ต้องดำเนินการ</div>
+          <div class="stat-icon"><i class="bi bi-hourglass"></i></div>
+        </div>
+        <div class="stat-card green" onclick="filterByStatus('approved')">
+          <div class="stat-num" style="color:var(--success)">189</div>
+          <div class="stat-label">อนุมัติแล้ว</div>
+          <div class="stat-trend"><i class="bi bi-check2-all"></i> อัตรา 76.5%</div>
+          <div class="stat-icon"><i class="bi bi-check-circle"></i></div>
+        </div>
+        <div class="stat-card orange" onclick="showPage('expiring')">
+          <div class="stat-num" style="color:#e67e22">8</div>
+          <div class="stat-label">ใกล้หมดอายุ (90 วัน)</div>
+          <div class="stat-trend" style="color:#e67e22"><i class="bi bi-exclamation-triangle"></i> ส่งแจ้งเตือน</div>
+          <div class="stat-icon"><i class="bi bi-calendar-x"></i></div>
+        </div>
+      </div>
+
+      <!-- RECENT + CHART ROW -->
+      <div class="row g-4">
+        <div class="col-md-8">
+          <div class="table-card">
+            <div class="table-header">
+              <div class="table-title"><i class="bi bi-clock-history me-2"></i>คำขอล่าสุด (รอดำเนินการ)</div>
+              <button class="btn-topbar btn-outline-sm" onclick="showPage('requests')">ดูทั้งหมด →</button>
+            </div>
+            <div style="padding:0 4px">
+              <table class="table table-hover mb-0" style="font-size:13.5px">
+                <thead style="background:var(--gray-50)">
+                  <tr>
+                    <th style="padding:10px 14px;font-weight:700;color:var(--primary-dark);border:none">เลขที่คำขอ</th>
+                    <th style="padding:10px 14px;font-weight:700;color:var(--primary-dark);border:none">ชื่อ</th>
+                    <th style="padding:10px 14px;font-weight:700;color:var(--primary-dark);border:none">กิจการ</th>
+                    <th style="padding:10px 14px;font-weight:700;color:var(--primary-dark);border:none">วันที่</th>
+                    <th style="padding:10px 14px;font-weight:700;color:var(--primary-dark);border:none">สถานะ</th>
+                    <th style="padding:10px 14px;font-weight:700;color:var(--primary-dark);border:none">จัดการ</th>
+                  </tr>
+                </thead>
+                <tbody id="recentTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="chart-card">
+            <div class="chart-title"><i class="bi bi-pie-chart-fill me-2" style="color:var(--primary)"></i>สัดส่วนประเภทกิจการ</div>
+            <canvas id="bizChart" height="200"></canvas>
+          </div>
+          <div class="chart-card mt-3">
+            <div class="chart-title"><i class="bi bi-bell-fill me-2" style="color:#06C755"></i>LINE Notification วันนี้</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px">
+              <div style="background:#e8f5e9;border-radius:8px;padding:12px;text-align:center">
+                <div style="font-size:22px;font-weight:700;color:var(--success)">7</div>
+                <div style="color:var(--text-muted)">ส่งสำเร็จ</div>
+              </div>
+              <div style="background:#fff3cd;border-radius:8px;padding:12px;text-align:center">
+                <div style="font-size:22px;font-weight:700;color:var(--warning)">2</div>
+                <div style="color:var(--text-muted)">รอส่ง</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== REQUESTS TABLE =================== -->
+    <div id="page-requests" style="display:none">
+      <!-- FILTER BAR -->
+      <div class="filter-bar">
+        <select class="filter-select" id="filterStatus" onchange="applyFilters()">
+          <option value="">ทุกสถานะ</option>
+          <option value="waiting">รอตรวจสอบ</option>
+          <option value="processing">กำลังดำเนินการ</option>
+          <option value="docs">ขอเอกสารเพิ่ม</option>
+          <option value="approved">อนุมัติแล้ว</option>
+          <option value="rejected">ไม่อนุมัติ</option>
+        </select>
+        <select class="filter-select" id="filterMonth" onchange="applyFilters()">
+          <option value="">ทุกเดือน</option>
+          <option value="1">มกราคม</option><option value="2">กุมภาพันธ์</option>
+          <option value="3">มีนาคม</option><option value="4">เมษายน</option>
+          <option value="5">พฤษภาคม</option><option value="6">มิถุนายน</option>
+          <option value="7">กรกฎาคม</option><option value="8">สิงหาคม</option>
+          <option value="9">กันยายน</option><option value="10">ตุลาคม</option>
+          <option value="11">พฤศจิกายน</option><option value="12">ธันวาคม</option>
+        </select>
+        <select class="filter-select" id="filterYear" onchange="applyFilters()">
+          <option value="">ทุกปี</option>
+          <option value="2568">2568</option><option value="2567">2567</option><option value="2566">2566</option>
+        </select>
+        <select class="filter-select" id="filterBizCat" onchange="applyFilters()">
+          <option value="">ทุกประเภทกิจการ</option>
+          <option>กิจการที่เกี่ยวกับสัตว์เลี้ยง</option>
+          <option>กิจการที่เกี่ยวกับอาหาร เครื่องดื่ม น้ำดื่ม</option>
+          <option>กิจการที่เกี่ยวกับการบริการ</option>
+          <option>กิจการที่เกี่ยวกับยานยนต์</option>
+          <option>กิจการที่เกี่ยวกับโลหะหรือแร่</option>
+        </select>
+        <input type="date" class="filter-input" id="filterDateFrom" onchange="applyFilters()" title="วันที่เริ่ม">
+        <input type="date" class="filter-input" id="filterDateTo" onchange="applyFilters()" title="วันที่สิ้นสุด">
+        <button class="btn-topbar btn-outline-sm" onclick="resetFilters()"><i class="bi bi-x-circle me-1"></i>ล้างตัวกรอง</button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title"><i class="bi bi-table me-2"></i>รายการคำขอทั้งหมด</div>
+          <div style="display:flex;gap:8px">
+            <button class="btn-topbar btn-outline-sm" onclick="exportExcel()"><i class="bi bi-file-earmark-excel-fill" style="color:green"></i> Excel</button>
+            <button class="btn-topbar btn-outline-sm" onclick="exportPDF()"><i class="bi bi-file-earmark-pdf-fill" style="color:red"></i> PDF</button>
+          </div>
+        </div>
+        <div style="padding:12px 16px;overflow-x:auto">
+          <table id="mainTable" class="table table-hover nowrap w-100" style="font-size:13px">
+            <thead>
+              <tr>
+                <th>เลขที่คำขอ</th>
+                <th>วันที่ยื่น</th>
+                <th>ชื่อ-นามสกุล</th>
+                <th>ประเภทกิจการ</th>
+                <th>ชื่อกิจการ</th>
+                <th>ที่อยู่</th>
+                <th>โทรศัพท์</th>
+                <th>สถานะ</th>
+                <th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="mainTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== EXPIRING =================== -->
+    <div id="page-expiring" style="display:none">
+      <div class="expiry-warning mb-4">
+        <i class="bi bi-exclamation-triangle-fill" style="font-size:24px;flex-shrink:0"></i>
+        <div>
+          <strong>ใบอนุญาตใกล้หมดอายุ</strong><br>
+          มีใบอนุญาต 8 ฉบับที่จะหมดอายุภายใน 90 วัน ระบบแจ้งเตือนอัตโนมัติจะส่ง LINE ให้ผู้ประกอบการ 90, 60, และ 30 วันก่อนหมดอายุ
+          <button onclick="sendExpiryNotificationAll()" style="background:#5b2fa0;color:white;border:none;padding:6px 16px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;margin-left:12px">
+            <i class="bi bi-send-fill me-1"></i>ส่งแจ้งเตือนทั้งหมด
+          </button>
+        </div>
+      </div>
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title"><i class="bi bi-calendar-x me-2"></i>ใบอนุญาตใกล้หมดอายุ (ภายใน 90 วัน)</div>
+        </div>
+        <div style="padding:12px 16px;overflow-x:auto">
+          <table class="table table-hover" style="font-size:13.5px">
+            <thead style="background:var(--gray-50)">
+              <tr>
+                <th>เลขที่ใบอนุญาต</th><th>ชื่อผู้ประกอบการ</th><th>ชื่อกิจการ</th>
+                <th>ประเภท</th><th>วันหมดอายุ</th><th>เหลือ (วัน)</th><th>LINE</th><th>จัดการ</th>
+              </tr>
+            </thead>
+            <tbody id="expiryTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== LINE SETTINGS =================== -->
+    <div id="page-line" style="display:none">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="chart-card">
+            <div class="chart-title"><i class="bi bi-gear-fill me-2"></i>ตั้งค่า LINE Messaging API</div>
+            <div class="mb-3">
+              <label style="font-size:13px;font-weight:600">Channel Access Token</label>
+              <input type="password" class="form-control mt-1" placeholder="LINE Channel Access Token" style="font-size:13px">
+            </div>
+            <div class="mb-3">
+              <label style="font-size:13px;font-weight:600">Channel Secret</label>
+              <input type="password" class="form-control mt-1" placeholder="LINE Channel Secret" style="font-size:13px">
+            </div>
+            <div class="mb-3">
+              <label style="font-size:13px;font-weight:600">User ID เจ้าหน้าที่ (รับแจ้งเตือนคำขอใหม่)</label>
+              <input type="text" class="form-control mt-1" placeholder="U-xxxxxxxxxx" style="font-size:13px">
+            </div>
+            <div class="mb-3">
+              <label style="font-size:13px;font-weight:600">Group ID (สำหรับส่งกลุ่ม เช่น กลุ่มสาธารณสุข)</label>
+              <input type="text" class="form-control mt-1" placeholder="C-xxxxxxxxxx" style="font-size:13px">
+            </div>
+            <button class="btn-topbar btn-line w-100" style="justify-content:center" onclick="testLineNotification()">
+              <i class="bi bi-send-fill me-2"></i>ทดสอบส่ง LINE
+            </button>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="chart-card">
+            <div class="chart-title"><i class="bi bi-bell-fill me-2"></i>การแจ้งเตือนอัตโนมัติ</div>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-weight:600;font-size:14px">เมื่อมีคำขอใหม่</div>
+                  <div style="font-size:12px;color:var(--text-muted)">แจ้งเจ้าหน้าที่ทันที</div>
+                </div>
+                <div class="form-check form-switch">
+                  <input type="checkbox" class="form-check-input" checked id="notif1" style="width:40px;height:22px;cursor:pointer">
+                </div>
+              </div>
+              <div style="border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-weight:600;font-size:14px">เมื่อเปลี่ยนสถานะ</div>
+                  <div style="font-size:12px;color:var(--text-muted)">แจ้งผู้ประกอบการทันที</div>
+                </div>
+                <div class="form-check form-switch">
+                  <input type="checkbox" class="form-check-input" checked style="width:40px;height:22px;cursor:pointer">
+                </div>
+              </div>
+              <div style="border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-weight:600;font-size:14px">แจ้งเตือน 90 วันก่อนหมดอายุ</div>
+                  <div style="font-size:12px;color:var(--text-muted)">แจ้งผู้ประกอบการล่วงหน้า</div>
+                </div>
+                <div class="form-check form-switch">
+                  <input type="checkbox" class="form-check-input" checked style="width:40px;height:22px;cursor:pointer">
+                </div>
+              </div>
+              <div style="border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-weight:600;font-size:14px">แจ้งเตือน 30 วันก่อนหมดอายุ</div>
+                  <div style="font-size:12px;color:var(--text-muted)">แจ้งผู้ประกอบการครั้งสุดท้าย</div>
+                </div>
+                <div class="form-check form-switch">
+                  <input type="checkbox" class="form-check-input" checked style="width:40px;height:22px;cursor:pointer">
+                </div>
+              </div>
+              <div style="border:1px solid var(--border);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                  <div style="font-weight:600;font-size:14px">รายงานสรุปรายสัปดาห์</div>
+                  <div style="font-size:12px;color:var(--text-muted)">ส่งให้ผู้บริหารทุกวันจันทร์</div>
+                </div>
+                <div class="form-check form-switch">
+                  <input type="checkbox" class="form-check-input" style="width:40px;height:22px;cursor:pointer">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12">
+          <div class="chart-card">
+            <div class="chart-title"><i class="bi bi-card-text me-2"></i>ตัวอย่าง LINE Flex Message</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+                  <div style="background:#06C755;padding:12px 16px;color:white;font-weight:700;font-size:13px">📋 แจ้งเตือนเจ้าหน้าที่ — คำขอใหม่</div>
+                  <div style="padding:16px;font-size:13px;line-height:1.8;background:#f9f9f9">
+                    🔔 [ระบบแจ้งเตือนเทศบาลตำบลสันทราย]<br>
+                    มีคำขอใบอนุญาตใหม่เข้าสู่ระบบ!<br><br>
+                    📄 เลขที่คำขอ: <strong>REQ-68001</strong><br>
+                    👤 ชื่อผู้ประกอบการ: นายสมชาย ใจดี<br>
+                    🏪 กิจการ: สมชาย ฟาร์มหมู<br>
+                    📂 ประเภท: การเลี้ยงสุกร<br>
+                    🏷️ ประเภทคำขอ: ขอใหม่<br>
+                    สถานะ: 🟡 รอตรวจสอบ<br><br>
+                    <div style="background:#1a3a6b;color:white;padding:8px 16px;border-radius:6px;text-align:center;font-weight:700">👉 คลิกตรวจสอบในระบบ</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+                  <div style="background:#06C755;padding:12px 16px;color:white;font-weight:700;font-size:13px">✅ แจ้งเตือนผู้ประกอบการ — อนุมัติ</div>
+                  <div style="padding:16px;font-size:13px;line-height:1.8;background:#f9f9f9">
+                    ✅ [อัปเดตสถานะคำขอใบอนุญาต]<br>
+                    เรียน คุณสมชาย ใจดี<br><br>
+                    📄 คำขอเลขที่: <strong>REQ-68001</strong><br>
+                    🏪 กิจการ: สมชาย ฟาร์มหมู<br>
+                    สถานะ: 🟢 <strong>อนุมัติเรียบร้อยแล้ว</strong><br><br>
+                    📌 หมายเหตุ: โปรดมารับใบอนุญาตที่กองสาธารณสุข ภายใน 7 วันทำการ<br>
+                    📞 สอบถาม: 053-XXX-XXX<br><br>
+                    <div style="background:#0d8a4e;color:white;padding:8px 16px;border-radius:6px;text-align:center;font-weight:700">📋 ดูรายละเอียด</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =================== REPORT =================== -->
+    <div id="page-report" style="display:none">
+      <div class="row g-4">
+        <div class="col-md-8">
+          <div class="chart-card">
+            <div class="chart-title"><i class="bi bi-bar-chart-fill me-2"></i>จำนวนคำขอรายเดือน (2568)</div>
+            <canvas id="monthlyChart" height="100"></canvas>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="chart-card">
+            <div class="chart-title"><i class="bi bi-pie-chart-fill me-2"></i>สัดส่วนประเภทกิจการ</div>
+            <canvas id="bizChart2" height="200"></canvas>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="chart-card">
+            <div class="chart-title">📊 สรุปปีนี้</div>
+            <table style="width:100%;font-size:14px">
+              <tr><td style="color:var(--text-muted);padding:5px 0">ยื่นใหม่</td><td style="font-weight:700;text-align:right">186 ราย</td></tr>
+              <tr><td style="color:var(--text-muted);padding:5px 0">ต่ออายุ</td><td style="font-weight:700;text-align:right">61 ราย</td></tr>
+              <tr><td style="color:var(--text-muted);padding:5px 0">อนุมัติ</td><td style="font-weight:700;text-align:right">189 ราย (76.5%)</td></tr>
+              <tr><td style="color:var(--text-muted);padding:5px 0">ไม่อนุมัติ</td><td style="font-weight:700;text-align:right">18 ราย (7.3%)</td></tr>
+              <tr><td style="color:var(--text-muted);padding:5px 0">รอดำเนินการ</td><td style="font-weight:700;text-align:right">40 ราย</td></tr>
+              <tr style="border-top:2px solid var(--border)"><td style="color:var(--text-muted);padding:7px 0">เฉลี่ยวันอนุมัติ</td><td style="font-weight:700;text-align:right;color:var(--success)">2.8 วัน</td></tr>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="chart-card">
+            <div class="chart-title">🏆 ประเภทกิจการยอดนิยม</div>
+            <table style="width:100%;font-size:13.5px">
+              <thead><tr style="background:var(--gray-50)"><th style="padding:8px">ประเภทกิจการ</th><th style="padding:8px;text-align:right">จำนวน</th><th style="padding:8px;text-align:right">สัดส่วน</th></tr></thead>
+              <tbody>
+                <tr><td style="padding:8px">กิจการที่เกี่ยวกับการบริการ</td><td style="padding:8px;text-align:right;font-weight:700">68</td><td style="padding:8px;text-align:right"><div style="height:8px;background:#e8f2ff;border-radius:4px;overflow:hidden"><div style="width:68%;height:100%;background:var(--primary)"></div></div></td></tr>
+                <tr><td style="padding:8px">กิจการที่เกี่ยวกับอาหาร เครื่องดื่ม</td><td style="padding:8px;text-align:right;font-weight:700">52</td><td style="padding:8px;text-align:right"><div style="height:8px;background:#e8f2ff;border-radius:4px;overflow:hidden"><div style="width:52%;height:100%;background:var(--primary-light)"></div></div></td></tr>
+                <tr><td style="padding:8px">กิจการที่เกี่ยวกับยานยนต์</td><td style="padding:8px;text-align:right;font-weight:700">38</td><td style="padding:8px;text-align:right"><div style="height:8px;background:#e8f2ff;border-radius:4px;overflow:hidden"><div style="width:38%;height:100%;background:var(--accent)"></div></div></td></tr>
+                <tr><td style="padding:8px">กิจการที่เกี่ยวกับสัตว์เลี้ยง</td><td style="padding:8px;text-align:right;font-weight:700">29</td><td style="padding:8px;text-align:right"><div style="height:8px;background:#e8f2ff;border-radius:4px;overflow:hidden"><div style="width:29%;height:100%;background:var(--success)"></div></div></td></tr>
+                <tr><td style="padding:8px">กิจการอื่นๆ</td><td style="padding:8px;text-align:right;font-weight:700">60</td><td style="padding:8px;text-align:right"><div style="height:8px;background:#e8f2ff;border-radius:4px;overflow:hidden"><div style="width:60%;height:100%;background:#8b5cf6"></div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OTHER PAGES -->
+    <div id="page-approved" style="display:none"><div class="table-card"><div class="table-header"><div class="table-title">✅ รายการที่อนุมัติแล้ว</div></div><div style="padding:20px;color:var(--text-muted)">กรุณาใช้ตัวกรองสถานะ "อนุมัติแล้ว" ในหน้ารายการคำขอ</div></div></div>
+    <div id="page-export" style="display:none">
+      <div class="chart-card">
+        <div class="chart-title"><i class="bi bi-download me-2"></i>Export ข้อมูล</div>
+        <div class="row g-3 mt-2">
+          <div class="col-md-3"><label style="font-size:13px;font-weight:600">เดือน</label><select class="form-select form-select-sm mt-1" style="font-family:Sarabun,sans-serif"><option>ทุกเดือน</option><option>มิถุนายน</option><option>พฤษภาคม</option></select></div>
+          <div class="col-md-3"><label style="font-size:13px;font-weight:600">ปี</label><select class="form-select form-select-sm mt-1" style="font-family:Sarabun,sans-serif"><option>2568</option><option>2567</option></select></div>
+          <div class="col-md-3"><label style="font-size:13px;font-weight:600">สถานะ</label><select class="form-select form-select-sm mt-1" style="font-family:Sarabun,sans-serif"><option>ทั้งหมด</option><option>อนุมัติแล้ว</option><option>รอตรวจสอบ</option></select></div>
+          <div class="col-md-3"><label style="font-size:13px;font-weight:600">&nbsp;</label><div class="mt-1 d-flex gap-2">
+            <button onclick="exportExcel()" style="background:green;color:white;border:none;padding:6px 12px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer"><i class="bi bi-file-earmark-excel-fill me-1"></i>Excel</button>
+            <button onclick="exportPDF()" style="background:#c0392b;color:white;border:none;padding:6px 12px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer"><i class="bi bi-file-earmark-pdf-fill me-1"></i>PDF</button>
+          </div></div>
+        </div>
+      </div>
+    </div>
+    <div id="page-settings" style="display:none">
+      <div class="chart-card">
+        <div class="chart-title"><i class="bi bi-gear-fill me-2"></i>ตั้งค่าระบบ</div>
+        <div class="row g-3 mt-2">
+          <div class="col-md-6"><label style="font-size:13px;font-weight:600">ชื่อหน่วยงาน</label><input type="text" class="form-control mt-1" value="เทศบาลตำบลสันทราย" style="font-family:Sarabun,sans-serif;font-size:14px"></div>
+          <div class="col-md-6"><label style="font-size:13px;font-weight:600">เบอร์โทรศัพท์</label><input type="text" class="form-control mt-1" value="053-XXX-XXX" style="font-family:Sarabun,sans-serif;font-size:14px"></div>
+          <div class="col-md-6"><label style="font-size:13px;font-weight:600">อีเมลหน่วยงาน</label><input type="email" class="form-control mt-1" value="health@sansai.go.th" style="font-family:Sarabun,sans-serif;font-size:14px"></div>
+          <div class="col-md-6"><label style="font-size:13px;font-weight:600">URL ระบบ (สำหรับ LINE Link)</label><input type="text" class="form-control mt-1" placeholder="https://your-domain.com" style="font-family:Sarabun,sans-serif;font-size:14px"></div>
+          <div class="col-12"><button style="background:var(--primary);color:white;border:none;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer">บันทึกการตั้งค่า</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- DETAIL MODAL -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-file-earmark-text me-2"></i>รายละเอียดคำขอ</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+        <button type="button" class="btn btn-warning" onclick="generateDocument()"><i class="bi bi-file-earmark-pdf me-1"></i>สร้างเอกสาร</button>
+        <button type="button" class="btn btn-success" onclick="saveStatusChange()"><i class="bi bi-check-circle me-1"></i>บันทึกการเปลี่ยนสถานะ</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LINE MODAL -->
+<div class="modal fade" id="lineModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-chat-square-dots-fill me-2"></i>ส่ง LINE Notification</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label style="font-size:13px;font-weight:600">ผู้รับ</label>
+          <select class="form-select mt-1" style="font-family:Sarabun,sans-serif;font-size:14px">
+            <option>เจ้าหน้าที่ทั้งหมด</option><option>กลุ่มสาธารณสุข</option><option>ผู้บริหาร</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label style="font-size:13px;font-weight:600">ข้อความ</label>
+          <textarea class="form-control mt-1" rows="5" style="font-family:Sarabun,sans-serif;font-size:14px" placeholder="พิมพ์ข้อความที่ต้องการส่ง...">📊 รายงานสรุปคำขอใบอนุญาตประจำวัน
+วันที่: 20 มิถุนายน 2568
+
+✅ อนุมัติวันนี้: 3 ราย
+⏳ รอดำเนินการ: 14 ราย
+📋 คำขอใหม่: 2 ราย
+
+👉 ดูรายละเอียดในระบบ</textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+        <button type="button" class="btn text-white" style="background:#06C755" onclick="sendLineFromModal()"><i class="bi bi-send-fill me-1"></i>ส่ง LINE</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script> const API_URL = 'https://script.google.com/macros/s/AKfycbxA6byQdKbR8NOvWXiomgEsVZW_EvGUmXXk0VCjK2CiDwF14kfU0qaFVaVjeuFb0Ne7/exec';
+
+// ===== DEMO DATA =====
+const allRequests = [
+  { id:'REQ-68001', date:'15/06/68', name:'นายสมชาย ใจดี', bizType:'กิจการที่เกี่ยวกับสัตว์เลี้ยง', bizName:'สมชาย ฟาร์มหมู', addr:'ต.สันทราย', phone:'081-234-5678', status:'approved', reqType:'ขอใหม่', idCard:'1-2345-67890-12-3', age:45, nationality:'ไทย', month:6, year:2568, licenseNo:'ทส.01/2568', expiry:'30/06/69', note:'ผ่านการประชาคมหมู่บ้านแล้ว' },
+  { id:'REQ-68002', date:'18/06/68', name:'นางสาวมาลี สวัสดี', bizType:'กิจการที่เกี่ยวกับการบริการ', bizName:'ร้านเสริมสวยมาลี', addr:'ต.สันทราย', phone:'082-345-6789', status:'processing', reqType:'ขอใหม่', idCard:'1-3456-78901-23-4', age:32, nationality:'ไทย', month:6, year:2568, note:'' },
+  { id:'REQ-68003', date:'20/06/68', name:'นายวิชัย แก้วมา', bizType:'กิจการที่เกี่ยวกับยานยนต์', bizName:'วิชัยอู่ซ่อมรถ', addr:'ต.สันทราย', phone:'083-456-7890', status:'waiting', reqType:'ต่ออายุ', idCard:'1-4567-89012-34-5', age:50, nationality:'ไทย', month:6, year:2568, note:'' },
+  { id:'REQ-68004', date:'10/06/68', name:'นางประไพ รักดี', bizType:'กิจการที่เกี่ยวกับอาหาร', bizName:'ประไพ น้ำดื่ม', addr:'ต.สันทราย', phone:'084-567-8901', status:'docs', reqType:'ขอใหม่', idCard:'1-5678-90123-45-6', age:48, nationality:'ไทย', month:6, year:2568, note:'ขอสำเนาทะเบียนพาณิชย์เพิ่มเติม' },
+  { id:'REQ-68005', date:'05/06/68', name:'นายสมหวัง ใจเย็น', bizType:'กิจการที่เกี่ยวกับโลหะหรือแร่', bizName:'สมหวังโลหะกิจ', addr:'ต.สันทราย', phone:'085-678-9012', status:'rejected', reqType:'ขอใหม่', idCard:'1-6789-01234-56-7', age:55, nationality:'ไทย', month:5, year:2568, note:'เอกสารไม่ครบ ไม่มีหนังสือยินยอม' },
+  { id:'REQ-68006', date:'01/06/68', name:'นางสุดา มีสุข', bizType:'กิจการที่เกี่ยวกับการบริการ', bizName:'สปาสุดา', addr:'ต.สันทราย', phone:'086-789-0123', status:'approved', reqType:'ต่ออายุ', idCard:'1-7890-12345-67-8', age:38, nationality:'ไทย', month:6, year:2568, licenseNo:'ทส.05/2568', expiry:'01/06/69', note:'' },
+  { id:'REQ-68007', date:'25/05/68', name:'นายอนันต์ ดีเลิศ', bizType:'กิจการที่เกี่ยวกับไม้หรือกระดาษ', bizName:'อนันต์เฟอร์นิเจอร์', addr:'ต.สันทราย', phone:'087-890-1234', status:'waiting', reqType:'ขอใหม่', idCard:'1-8901-23456-78-9', age:42, nationality:'ไทย', month:5, year:2568, note:'' },
+  { id:'REQ-68008', date:'15/05/68', name:'นางสาวนุชนาถ ทองใส', bizType:'กิจการที่เกี่ยวกับอาหาร', bizName:'ร้านขนมนุชนาถ', addr:'ต.สันทราย', phone:'088-901-2345', status:'approved', reqType:'ขอใหม่', idCard:'1-9012-34567-89-0', age:29, nationality:'ไทย', month:5, year:2568, licenseNo:'ทส.07/2568', expiry:'15/05/69', note:'' },
+];
+
+const expiryData = [
+  { licenseNo:'ทส.01/2567', name:'นายธนา วงษ์ดี', bizName:'ธนาฟาร์มไก่', bizType:'สัตว์เลี้ยง', expiry:'30/07/68', daysLeft:40, line:'✅' },
+  { licenseNo:'ทส.03/2567', name:'นางพิมล ชัยมงคล', bizName:'พิมลสปา', bizType:'บริการ', expiry:'15/08/68', daysLeft:56, line:'✅' },
+  { licenseNo:'ทส.08/2567', name:'นายกิตติ แสงเงิน', bizName:'กิตติอู่ซ่อม', bizType:'ยานยนต์', expiry:'20/09/68', daysLeft:92, line:'⏳' },
+];
+
+const statusMap = {
+  waiting:    { cls:'bs-waiting',    label:'⏳ รอตรวจสอบ' },
+  processing: { cls:'bs-processing', label:'🔄 กำลังดำเนินการ' },
+  docs:       { cls:'bs-docs',       label:'📎 ขอเอกสารเพิ่ม' },
+  approved:   { cls:'bs-approved',   label:'✅ อนุมัติแล้ว' },
+  rejected:   { cls:'bs-rejected',   label:'❌ ไม่อนุมัติ' },
+};
+
+let currentReq = null;
+let mainDT = null;
+
+// ===== PAGES =====
+function showPage(page) {
+  document.querySelectorAll('[id^="page-"]').forEach(p => p.style.display = 'none');
+  document.getElementById('page-'+page).style.display = 'block';
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  event.target.closest('.nav-item').classList.add('active');
+
+  const titles = { dashboard:'Dashboard', requests:'รายการคำขอทั้งหมด', approved:'อนุมัติแล้ว', expiring:'ใบอนุญาตใกล้หมดอายุ', line:'LINE Notification', report:'รายงานสรุป', export:'Export ข้อมูล', settings:'ตั้งค่าระบบ' };
+  document.getElementById('pageTitle').textContent = titles[page] || page;
+
+  if (page === 'requests' && !mainDT) initMainTable();
+  if (page === 'expiring') renderExpiryTable();
+  if (page === 'report') initReportCharts();
+}
+
+// ===== RENDER RECENT TABLE =====
+function renderRecentTable() {
+  const tbody = document.getElementById('recentTableBody');
+  const recent = allRequests.filter(r => r.status === 'waiting' || r.status === 'processing' || r.status === 'docs').slice(0,5);
+  tbody.innerHTML = recent.map(r => {
+    const s = statusMap[r.status];
+    return `<tr>
+      <td style="padding:10px 14px;font-weight:700;color:var(--primary)">${r.id}</td>
+      <td style="padding:10px 14px">${r.name}</td>
+      <td style="padding:10px 14px">${r.bizName}</td>
+      <td style="padding:10px 14px">${r.date}</td>
+      <td style="padding:10px 14px"><span class="badge-status ${s.cls}">${s.label}</span></td>
+      <td style="padding:10px 14px">
+        <button onclick="openDetail('${r.id}')" style="background:var(--primary);color:white;border:none;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer">
+          <i class="bi bi-eye-fill"></i> ดู
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+// ===== INIT MAIN TABLE =====
+function initMainTable() {
+  renderMainTableData(allRequests);
+  if ($.fn.DataTable.isDataTable('#mainTable')) return;
+  mainDT = $('#mainTable').DataTable({
+    language: { url: '//cdn.datatables.net/plug-ins/1.13.8/i18n/th.json',
+      search: "ค้นหา:", lengthMenu: "แสดง _MENU_ รายการ", info: "แสดง _START_-_END_ จาก _TOTAL_ รายการ",
+      paginate: { first:"หน้าแรก", last:"หน้าสุดท้าย", next:"ถัดไป", previous:"ก่อนหน้า" }
+    },
+    pageLength: 10, responsive: true, order: [[1, 'desc']],
+    columnDefs: [{ orderable: false, targets: -1 }]
+  });
+}
+
+function renderMainTableData(data) {
+  const tbody = document.getElementById('mainTableBody');
+  tbody.innerHTML = data.map(r => {
+    const s = statusMap[r.status];
+    return `<tr>
+      <td style="font-weight:700;color:var(--primary)">${r.id}</td>
+      <td>${r.date}</td>
+      <td>${r.name}</td>
+      <td>${r.bizType.replace('กิจการที่เกี่ยวกับ','')}</td>
+      <td>${r.bizName}</td>
+      <td>${r.addr}</td>
+      <td>${r.phone}</td>
+      <td><span class="badge-status ${s.cls}">${s.label}</span></td>
+      <td>
+        <button onclick="openDetail('${r.id}')" style="background:var(--primary);color:white;border:none;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;margin-right:4px"><i class="bi bi-eye-fill"></i></button>
+        <button onclick="quickNotify('${r.id}')" style="background:#06C755;color:white;border:none;padding:5px 10px;border-radius:6px;font-size:12px;cursor:pointer"><i class="bi bi-chat-dots-fill"></i></button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function applyFilters() {
+  const status = document.getElementById('filterStatus').value;
+  const month = parseInt(document.getElementById('filterMonth').value);
+  const year = parseInt(document.getElementById('filterYear').value) - 2500;
+  let filtered = allRequests;
+  if (status) filtered = filtered.filter(r => r.status === status);
+  if (month) filtered = filtered.filter(r => r.month === month);
+  renderMainTableData(filtered);
+}
+
+function resetFilters() {
+  ['filterStatus','filterMonth','filterYear','filterBizCat'].forEach(id => document.getElementById(id).value = '');
+  renderMainTableData(allRequests);
+}
+
+// ===== DETAIL MODAL =====
+function openDetail(id) {
+  currentReq = allRequests.find(r => r.id === id);
+  if (!currentReq) return;
+  const s = statusMap[currentReq.status];
+  
+  document.getElementById('modalBody').innerHTML = `
+    <div class="row g-3">
+      <div class="col-md-8">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+          <div>
+            <h5 style="font-family:Prompt,sans-serif;color:var(--primary-dark);margin:0">${currentReq.bizName}</h5>
+            <div style="font-size:13px;color:var(--text-muted)">${currentReq.id} | วันที่ยื่น: ${currentReq.date} | ${currentReq.reqType}</div>
+          </div>
+          <span class="badge-status ${s.cls}" style="font-size:14px">${s.label}</span>
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div style="background:var(--secondary);border-radius:10px;padding:16px">
+              <div style="font-weight:700;color:var(--primary);margin-bottom:12px;font-size:14px"><i class="bi bi-person-fill me-2"></i>ผู้ขอรับใบอนุญาต</div>
+              <div class="detail-label">ชื่อ-นามสกุล</div><div class="detail-value mb-2">${currentReq.name}</div>
+              <div class="detail-label">เลขบัตรประชาชน</div><div class="detail-value mb-2">${currentReq.idCard}</div>
+              <div class="detail-label">อายุ / สัญชาติ</div><div class="detail-value mb-2">${currentReq.age} ปี / ${currentReq.nationality}</div>
+              <div class="detail-label">โทรศัพท์</div><div class="detail-value">${currentReq.phone}</div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div style="background:var(--secondary);border-radius:10px;padding:16px">
+              <div style="font-weight:700;color:var(--primary);margin-bottom:12px;font-size:14px"><i class="bi bi-grid-fill me-2"></i>ประเภทกิจการ</div>
+              <div class="detail-label">หมวดกิจการ</div><div class="detail-value mb-2">${currentReq.bizType}</div>
+              <div class="detail-label">สถานที่</div><div class="detail-value mb-2">${currentReq.addr}</div>
+              ${currentReq.licenseNo ? `<div class="detail-label">เลขใบอนุญาต</div><div class="detail-value mb-2">${currentReq.licenseNo}</div>` : ''}
+              ${currentReq.expiry ? `<div class="detail-label">วันหมดอายุ</div><div class="detail-value">${currentReq.expiry}</div>` : ''}
+            </div>
+          </div>
+        </div>
+
+        ${currentReq.note ? `<div style="background:#fff8e6;border:1px solid #fcd97d;border-radius:8px;padding:12px;margin-top:12px;font-size:13.5px"><strong style="color:var(--warning)">📌 หมายเหตุ:</strong> ${currentReq.note}</div>` : ''}
+
+        <hr class="section-divider">
+        <div style="font-weight:700;color:var(--primary-dark);margin-bottom:12px"><i class="bi bi-paperclip me-2"></i>เอกสารที่แนบ</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          ${['บัตรประชาชน','ทะเบียนบ้าน'].map(d => `<span style="background:var(--secondary);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer" onclick="viewDoc('${d}')"><i class="bi bi-file-earmark-pdf-fill me-1" style="color:#c0392b"></i>${d}</span>`).join('')}
+        </div>
+
+        <hr class="section-divider">
+        <div style="font-weight:700;color:var(--primary-dark);margin-bottom:12px"><i class="bi bi-clock-history me-2"></i>ประวัติการดำเนินการ</div>
+        <div class="status-timeline-modal">
+          <div class="timeline-entry"><div class="t-date">15 มิ.ย. 68 09:12</div><div class="t-label">รับคำขอเข้าระบบ</div><div class="t-note">ระบบบันทึกอัตโนมัติ</div></div>
+          ${currentReq.status !== 'waiting' ? `<div class="timeline-entry"><div class="t-date">16 มิ.ย. 68 10:30</div><div class="t-label">ตรวจสอบเอกสาร</div><div class="t-note">นายสมศักดิ์ เจ้าหน้าที่</div></div>` : ''}
+          ${currentReq.status === 'approved' ? `<div class="timeline-entry"><div class="t-date">18 มิ.ย. 68 14:00</div><div class="t-label">ออกใบอนุญาตแล้ว</div><div class="t-note">อนุมัติโดย ผอ.กองสาธารณสุข</div></div>` : ''}
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div style="background:var(--gray-50);border-radius:10px;padding:16px;border:1px solid var(--border)">
+          <div style="font-weight:700;color:var(--primary-dark);margin-bottom:14px"><i class="bi bi-pencil-square me-2"></i>เปลี่ยนสถานะ</div>
+          <div class="status-btn-group mb-3">
+            <button class="status-option ${currentReq.status==='waiting'?'selected':''}" onclick="selectStatus('waiting')">⏳ รอตรวจสอบ</button>
+            <button class="status-option ${currentReq.status==='processing'?'selected':''}" onclick="selectStatus('processing')">🔄 กำลังดำเนินการ</button>
+            <button class="status-option ${currentReq.status==='docs'?'selected':''}" onclick="selectStatus('docs')">📎 ขอเอกสารเพิ่ม</button>
+            <button class="status-option ${currentReq.status==='approved'?'selected':''}" onclick="selectStatus('approved')">✅ อนุมัติ</button>
+            <button class="status-option ${currentReq.status==='rejected'?'selected':''}" onclick="selectStatus('rejected')">❌ ไม่อนุมัติ</button>
+          </div>
+          <label style="font-size:13px;font-weight:600">หมายเหตุเจ้าหน้าที่</label>
+          <textarea id="officerNote" class="form-control mt-1" rows="3" style="font-family:Sarabun,sans-serif;font-size:13.5px" placeholder="ระบุหมายเหตุ...">${currentReq.note||''}</textarea>
+          
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+            <div style="font-weight:700;color:var(--primary-dark);margin-bottom:10px;font-size:13px"><i class="bi bi-chat-dots-fill me-1" style="color:#06C755"></i>ส่ง LINE แจ้งผู้ประกอบการ</div>
+            <label style="font-size:12px">LINE ID ผู้ประกอบการ</label>
+            <input type="text" id="userLineId" class="form-control mt-1 mb-2" placeholder="Line ID" style="font-size:13px">
+            <button onclick="sendLineToUser()" style="background:#06C755;color:white;border:none;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;width:100%">
+              <i class="bi bi-send-fill me-1"></i>ส่ง LINE แจ้งผู้ประกอบการ
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  
+  new bootstrap.Modal(document.getElementById('detailModal')).show();
+}
+
+function selectStatus(status) {
+  document.querySelectorAll('.status-option').forEach(b => b.classList.remove('selected'));
+  event.target.closest('.status-option').classList.add('selected');
+  currentReq.selectedStatus = status;
+}
+
+function saveStatusChange() {
+  if (!currentReq.selectedStatus) { Swal.fire({ icon:'warning', title:'กรุณาเลือกสถานะ', confirmButtonColor:'#1a3a6b' }); return; }
+  const req = allRequests.find(r => r.id === currentReq.id);
+  req.status = currentReq.selectedStatus;
+  req.note = document.getElementById('officerNote').value;
+  
+  Swal.fire({ icon:'success', title:'บันทึกสำเร็จ', text:`เปลี่ยนสถานะเป็น "${statusMap[req.status].label}" แล้ว`, confirmButtonColor:'#1a3a6b', timer:2000, showConfirmButton:false });
+  bootstrap.Modal.getInstance(document.getElementById('detailModal')).hide();
+  renderRecentTable();
+}
+
+function sendLineToUser() {
+  Swal.fire({ icon:'success', title:'ส่ง LINE แล้ว', text:'ส่งข้อความแจ้งเตือนผ่าน LINE Messaging API แล้ว (Mock)', timer:2000, showConfirmButton:false });
+}
+
+function quickNotify(id) {
+  const req = allRequests.find(r => r.id === id);
+  Swal.fire({ icon:'success', title:'ส่ง LINE Notification', html:`ส่งแจ้งเตือนคำขอ <strong>${id}</strong> ถึงผู้ประกอบการแล้ว`, confirmButtonColor:'#1a3a6b' });
+}
+
+function viewDoc(name) {
+  Swal.fire({ title:'ดูเอกสาร: '+name, text:'(ในระบบจริงจะเปิดดูไฟล์ที่แนบ)', icon:'info', confirmButtonColor:'#1a3a6b' });
+}
+
+function generateDocument() {
+  Swal.fire({ icon:'success', title:'สร้างเอกสารสำเร็จ', text:'ระบบดึงข้อมูลไปสร้างใบอนุญาตอัตโนมัติแล้ว (Mock — ในระบบจริงจะเปิด PDF)', confirmButtonColor:'#1a3a6b' });
+}
+
+// ===== EXPIRY TABLE =====
+function renderExpiryTable() {
+  const tbody = document.getElementById('expiryTableBody');
+  tbody.innerHTML = expiryData.map(r => `
+    <tr>
+      <td style="font-weight:700;color:var(--primary)">${r.licenseNo}</td>
+      <td>${r.name}</td>
+      <td>${r.bizName}</td>
+      <td>${r.bizType}</td>
+      <td style="font-weight:600;color:var(--danger)">${r.expiry}</td>
+      <td><span style="background:${r.daysLeft<=30?'#f8d7da':'#fff3cd'};color:${r.daysLeft<=30?'#842029':'#856404'};padding:4px 10px;border-radius:10px;font-size:12px;font-weight:700">${r.daysLeft} วัน</span></td>
+      <td>${r.line}</td>
+      <td><button onclick="sendExpiryNotify('${r.licenseNo}')" style="background:#5b2fa0;color:white;border:none;padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer"><i class="bi bi-send-fill me-1"></i>ส่งแจ้งเตือน</button></td>
+    </tr>
+  `).join('');
+}
+
+function sendExpiryNotify(id) {
+  Swal.fire({ icon:'success', title:'ส่ง LINE แล้ว', text:`ส่งแจ้งเตือนใบอนุญาต ${id} ใกล้หมดอายุแล้ว`, timer:2000, showConfirmButton:false });
+}
+function sendExpiryNotificationAll() {
+  Swal.fire({ icon:'success', title:'ส่ง LINE ทั้งหมดแล้ว', text:`ส่งแจ้งเตือนไปยังผู้ประกอบการ ${expiryData.length} รายแล้ว`, confirmButtonColor:'#1a3a6b' });
+}
+
+// ===== LINE MODAL =====
+function showLineModal() {
+  new bootstrap.Modal(document.getElementById('lineModal')).show();
+}
+function sendLineFromModal() {
+  Swal.fire({ icon:'success', title:'ส่ง LINE Notification สำเร็จ', timer:2000, showConfirmButton:false });
+  bootstrap.Modal.getInstance(document.getElementById('lineModal')).hide();
+}
+function testLineNotification() {
+  Swal.fire({ icon:'success', title:'ทดสอบส่ง LINE สำเร็จ', text:'รับข้อความทดสอบเรียบร้อยแล้ว', confirmButtonColor:'#1a3a6b' });
+}
+
+// ===== EXPORT =====
+function exportExcel() {
+  Swal.fire({ icon:'success', title:'Export Excel สำเร็จ', text:'ไฟล์ Excel ถูกดาวน์โหลดแล้ว (Mock)', timer:2000, showConfirmButton:false });
+}
+function exportPDF() {
+  Swal.fire({ icon:'success', title:'Export PDF สำเร็จ', text:'ไฟล์ PDF ถูกดาวน์โหลดแล้ว (Mock)', timer:2000, showConfirmButton:false });
+}
+function exportData() { exportExcel(); }
+
+// ===== CHARTS =====
+function initCharts() {
+  new Chart(document.getElementById('bizChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['บริการ', 'อาหาร', 'ยานยนต์', 'สัตว์เลี้ยง', 'อื่นๆ'],
+      datasets: [{ data: [68,52,38,29,60], backgroundColor: ['#1a3a6b','#2557a7','#f0a500','#0d8a4e','#8b5cf6'], borderWidth:0 }]
+    },
+    options: { plugins:{ legend:{ position:'bottom', labels:{ font:{ family:'Sarabun' }, boxWidth:12 } } }, cutout:'65%' }
+  });
+}
+
+function initReportCharts() {
+  if (document.getElementById('monthlyChart').getContext('2d')._chart) return;
+  new Chart(document.getElementById('monthlyChart'), {
+    type: 'bar',
+    data: {
+      labels: ['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'],
+      datasets: [
+        { label:'คำขอใหม่', data:[18,14,22,19,25,28,0,0,0,0,0,0], backgroundColor:'rgba(26,58,107,0.8)', borderRadius:4 },
+        { label:'อนุมัติ', data:[15,12,19,16,22,24,0,0,0,0,0,0], backgroundColor:'rgba(13,138,78,0.8)', borderRadius:4 },
+      ]
+    },
+    options: { plugins:{ legend:{ labels:{ font:{ family:'Sarabun' } } } }, scales:{ y:{ beginAtZero:true } } }
+  });
+  new Chart(document.getElementById('bizChart2'), {
+    type: 'doughnut',
+    data: {
+      labels: ['บริการ', 'อาหาร', 'ยานยนต์', 'สัตว์เลี้ยง', 'อื่นๆ'],
+      datasets: [{ data: [68,52,38,29,60], backgroundColor: ['#1a3a6b','#2557a7','#f0a500','#0d8a4e','#8b5cf6'], borderWidth:0 }]
+    },
+    options: { plugins:{ legend:{ position:'bottom', labels:{ font:{ family:'Sarabun' }, boxWidth:12 } } }, cutout:'65%' }
+  });
+}
+
+function filterByStatus(status) {
+  showPage('requests'); 
+}
+
+// ===== INIT =====
+// ===== โหลดข้อมูลจริงจาก Sheets =====
+async function loadRealData() {
+  try {
+    const res = await fetch(`${API_URL}?action=getAll`);
+    const result = await res.json();
+    if (result.success && result.data.length > 0) {
+      // แปลง header ภาษาไทยเป็น key ที่ใช้ใน JS
+      // (ขึ้นอยู่กับชื่อคอลัมน์ใน Sheets ของคุณ)
+      allRequests.length = 0; // ล้างข้อมูล Mock เดิม
+      result.data.forEach(row => {
+        allRequests.push({
+          id:      row['เลขที่คำขอ'],
+          date:    row['วันที่ยื่น'],
+          name:    row['ชื่อ'] + ' ' + row['นามสกุล'],
+          bizType: row['หมวดกิจการ'],
+          bizName: row['ชื่อกิจการ'],
+          addr:    row['ที่อยู่สถานประกอบการ'],
+          phone:   row['โทรศัพท์'],
+          status:  mapStatusFromThai(row['สถานะ']),
+          note:    row['หมายเหตุ'] || '',
+        });
+      });
+      renderRecentTable();
+    }
+  } catch(e) {
+    console.log('ใช้ข้อมูล Demo แทน:', e);
+  }
+}
+
+// แปลงสถานะภาษาไทย → key ภาษาอังกฤษ
+function mapStatusFromThai(thai) {
+  const map = {
+    'รอตรวจสอบ': 'waiting',
+    'กำลังดำเนินการ': 'processing',
+    'ขอเอกสารเพิ่ม': 'docs',
+    'อนุมัติแล้ว': 'approved',
+    'ไม่อนุมัติ': 'rejected',
+  };
+  return map[thai] || 'waiting';
+}
+
+// ===== บันทึกสถานะจริง =====
+async function saveStatusChange() {
+  if (!currentReq.selectedStatus) {
+    Swal.fire({ icon:'warning', title:'กรุณาเลือกสถานะ', confirmButtonColor:'#1a3a6b' });
+    return;
+  }
+
+  const statusToThai = {
+    waiting: 'รอตรวจสอบ', processing: 'กำลังดำเนินการ',
+    docs: 'ขอเอกสารเพิ่ม', approved: 'อนุมัติแล้ว', rejected: 'ไม่อนุมัติ',
+  };
+
+  Swal.fire({ title:'⏳ กำลังบันทึก...', allowOutsideClick:false, 
+              showConfirmButton:false, didOpen:()=>Swal.showLoading() });
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        action:   'updateStatus',
+        reqNo:    currentReq.id,
+        status:   statusToThai[currentReq.selectedStatus],
+        note:     document.getElementById('officerNote').value,
+        userLineId: document.getElementById('userLineId').value,
+        officer:  'เจ้าหน้าที่',
+      })
+    });
+    const result = await res.json();
+
+    if (result.success) {
+      // อัปเดตข้อมูลใน array ด้วย
+      const req = allRequests.find(r => r.id === currentReq.id);
+      if (req) {
+        req.status = currentReq.selectedStatus;
+        req.note = document.getElementById('officerNote').value;
+      }
+      Swal.fire({ icon:'success', title:'บันทึกสำเร็จ', 
+                  timer:2000, showConfirmButton:false });
+      bootstrap.Modal.getInstance(
+        document.getElementById('detailModal')
+      ).hide();
+      renderRecentTable();
+    }
+  } catch(e) {
+    Swal.fire({ icon:'error', title:'เกิดข้อผิดพลาด', text:e.message,
+                confirmButtonColor:'#1a3a6b' });
+  }
+}
+
+// โหลดข้อมูลจริงตอนเปิดหน้า
+loadRealData();
+renderRecentTable();
+initCharts();
+</script>
+</body>
+</html>
