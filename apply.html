@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ยื่นคำขอใบอนุญาต | เทศบาลตำบลสันทราย</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700;800&family=Prompt:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<style>
+:root {
+  --primary:#1a3a6b;--primary-light:#2557a7;--primary-dark:#0f2347;
+  --accent:#f0a500;--accent-light:#ffc844;--secondary:#e8f2ff;
+  --text-dark:#1a2035;--text-muted:#6b7a99;--success:#0d8a4e;
+  --warning:#d48800;--danger:#c0392b;--white:#ffffff;--gray-50:#f8f9fc;
+  --gray-100:#edf0f7;--border:#d0d9ec;
+  --shadow-sm:0 2px 8px rgba(26,58,107,0.08);
+  --shadow-md:0 8px 32px rgba(26,58,107,0.12);--radius:12px;
+}
+*{box-sizing:border-box;}
+body{font-family:'Sarabun',sans-serif;background:var(--gray-50);color:var(--text-dark);margin:0;}
+.navbar-main{background:linear-gradient(135deg,var(--primary-dark) 0%,var(--primary) 60%,var(--primary-light) 100%);padding:0;box-shadow:0 4px 20px rgba(26,58,107,0.3);position:sticky;top:0;z-index:1000;}
+.navbar-inner{display:flex;justify-content:space-between;align-items:center;padding:10px 0;}
+.logo-area{display:flex;align-items:center;gap:12px;}
+.logo-circle{width:48px;height:48px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--primary);}
+.org-name{font-family:'Prompt',sans-serif;font-size:17px;font-weight:700;color:white;}
+.org-sub{font-size:12px;color:rgba(255,255,255,0.7);}
+.nav-links a{color:rgba(255,255,255,0.85);text-decoration:none;padding:8px 14px;border-radius:8px;font-size:14px;font-weight:500;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,0.18);color:white;}
+.btn-admin-nav{background:var(--accent)!important;color:var(--primary-dark)!important;font-weight:700!important;}
+.page-header{background:linear-gradient(135deg,var(--primary-dark),var(--primary));padding:32px 0;color:white;}
+.page-header h1{font-family:'Prompt',sans-serif;font-size:26px;font-weight:700;margin:0 0 6px;}
+.page-header p{opacity:0.8;margin:0;font-size:14px;}
+.breadcrumb-custom a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;}
+.breadcrumb-custom span{color:rgba(255,255,255,0.4);margin:0 6px;}
+.breadcrumb-custom .current{color:var(--accent-light);font-size:13px;}
+.form-container{max-width:960px;margin:0 auto;padding:32px 16px 64px;}
+.progress-steps{display:flex;align-items:center;margin-bottom:40px;background:white;border-radius:14px;padding:20px 24px;box-shadow:var(--shadow-sm);border:1px solid var(--border);}
+.progress-step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
+.progress-step:not(:last-child)::after{content:'';position:absolute;top:18px;left:calc(50% + 18px);width:calc(100% - 36px);height:2px;background:var(--border);}
+.progress-step.done:not(:last-child)::after{background:var(--success);}
+.step-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;border:2px solid var(--border);background:white;color:var(--text-muted);z-index:1;transition:all 0.3s;}
+.progress-step.done .step-circle{background:var(--success);border-color:var(--success);color:white;}
+.progress-step.active .step-circle{background:var(--primary);border-color:var(--primary);color:white;box-shadow:0 0 0 4px rgba(26,58,107,0.15);}
+.step-label{font-size:12px;margin-top:6px;color:var(--text-muted);text-align:center;}
+.progress-step.active .step-label{color:var(--primary);font-weight:600;}
+.progress-step.done .step-label{color:var(--success);}
+.form-section{background:white;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);margin-bottom:20px;overflow:hidden;}
+.section-header{background:linear-gradient(135deg,var(--secondary),#f0f6ff);padding:16px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;}
+.section-header .icon{width:36px;height:36px;background:var(--primary);color:white;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.section-header h2{font-size:17px;font-weight:700;color:var(--primary-dark);margin:0;}
+.section-header p{font-size:13px;color:var(--text-muted);margin:0;}
+.section-body{padding:24px;}
+.form-label{font-size:14px;font-weight:600;color:var(--text-dark);margin-bottom:6px;}
+.form-label .required{color:var(--danger);}
+.form-control,.form-select{border:1.5px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'Sarabun',sans-serif;font-size:14.5px;color:var(--text-dark);transition:border-color 0.2s,box-shadow 0.2s;background:white;}
+.form-control:focus,.form-select:focus{border-color:var(--primary-light);box-shadow:0 0 0 3px rgba(37,87,167,0.1);outline:none;}
+.invalid-feedback{font-size:12px;color:var(--danger);margin-top:4px;}
+.type-toggle{display:flex;gap:0;border-radius:10px;overflow:hidden;border:1.5px solid var(--border);width:fit-content;margin-bottom:24px;}
+.type-btn{padding:10px 28px;background:white;border:none;font-family:'Sarabun',sans-serif;font-size:14px;font-weight:600;color:var(--text-muted);cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:8px;}
+.type-btn.active{background:var(--primary);color:white;}
+.req-type-group{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+.req-type-card{flex:1;min-width:160px;border:2px solid var(--border);border-radius:10px;padding:14px;cursor:pointer;transition:all 0.2s;position:relative;}
+.req-type-card input{position:absolute;opacity:0;}
+.req-type-card .label{font-weight:700;font-size:14px;color:var(--text-muted);}
+.req-type-card .sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
+.req-type-card:has(input:checked){border-color:var(--primary);background:var(--secondary);}
+.req-type-card:has(input:checked) .label{color:var(--primary);}
+.file-upload-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;}
+.file-upload-item{border:2px dashed var(--border);border-radius:10px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--gray-50);position:relative;}
+.file-upload-item:hover{border-color:var(--primary-light);background:var(--secondary);}
+.file-upload-item.has-file{border-color:var(--success);background:#f0faf5;}
+.file-upload-icon{font-size:28px;margin-bottom:8px;}
+.file-upload-title{font-size:13px;font-weight:600;color:var(--text-dark);line-height:1.4;}
+.file-upload-sub{font-size:11px;color:var(--text-muted);margin-top:4px;}
+.file-required-badge{display:inline-block;background:var(--primary);color:white;font-size:10px;padding:2px 8px;border-radius:10px;margin-bottom:6px;}
+.file-optional-badge{display:inline-block;background:var(--gray-100);color:var(--text-muted);font-size:10px;padding:2px 8px;border-radius:10px;margin-bottom:6px;}
+.file-upload-item input[type="file"]{display:none;}
+.file-name-preview{font-size:11px;color:var(--success);margin-top:6px;font-weight:600;word-break:break-all;}
+.submit-section{background:white;border-radius:var(--radius);border:1px solid var(--border);padding:28px;box-shadow:var(--shadow-sm);}
+.btn-submit{background:linear-gradient(135deg,var(--primary),var(--primary-light));color:white;border:none;padding:14px 48px;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:17px;font-weight:700;cursor:pointer;transition:all 0.25s;display:inline-flex;align-items:center;gap:10px;box-shadow:0 6px 20px rgba(26,58,107,0.3);}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(26,58,107,0.4);}
+.btn-save-draft{background:var(--gray-100);color:var(--text-dark);border:1px solid var(--border);padding:14px 28px;border-radius:10px;font-family:'Sarabun',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-save-draft:hover{background:var(--border);}
+.autofill-banner{background:linear-gradient(135deg,#e8f2ff,#f0f6ff);border:1px solid var(--primary-light);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;font-size:14px;}
+.hidden{display:none!important;}
+.char-count{font-size:11px;color:var(--text-muted);text-align:right;margin-top:3px;}
+@media(max-width:768px){
+  .progress-steps{padding:16px;gap:4px;}
+  .step-label{font-size:10px;}
+  .section-body{padding:16px;}
+  .req-type-group{flex-direction:column;}
+  .file-upload-grid{grid-template-columns:1fr 1fr;}
+  .nav-links{display:none;}
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar-main">
+  <div class="container">
+    <div class="navbar-inner">
+      <div class="logo-area">
+        <div class="logo-circle"><i class="bi bi-building-fill"></i></div>
+        <div>
+          <div class="org-name">เทศบาลตำบลสันทราย</div>
+          <div class="org-sub">ระบบขอใบอนุญาตประกอบกิจการ</div>
+        </div>
+      </div>
+      <div class="nav-links">
+        <a href="index.html"><i class="bi bi-house-fill"></i> หน้าหลัก</a>
+        <a href="apply.html" class="active"><i class="bi bi-file-earmark-plus-fill"></i> ยื่นคำขอ</a>
+        <a href="admin.html" class="btn-admin-nav"><i class="bi bi-shield-lock-fill"></i> เจ้าหน้าที่</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <div class="breadcrumb-custom mb-2">
+      <a href="index.html">หน้าหลัก</a><span>›</span><span class="current">ยื่นคำขอใบอนุญาต</span>
+    </div>
+    <h1><i class="bi bi-file-earmark-plus-fill me-2"></i>แบบคำขอรับใบอนุญาตประกอบกิจการ</h1>
+    <p>ที่เป็นอันตรายต่อสุขภาพ ตามพระราชบัญญัติการสาธารณสุข พ.ศ. 2535</p>
+  </div>
+</div>
+
+<div class="form-container">
+  <div class="progress-steps" id="progressSteps">
+    <div class="progress-step active" id="step1-indicator"><div class="step-circle">1</div><div class="step-label">ผู้ยื่นคำขอ</div></div>
+    <div class="progress-step" id="step2-indicator"><div class="step-circle">2</div><div class="step-label">ประเภทกิจการ</div></div>
+    <div class="progress-step" id="step3-indicator"><div class="step-circle">3</div><div class="step-label">สถานประกอบการ</div></div>
+    <div class="progress-step" id="step4-indicator"><div class="step-circle">4</div><div class="step-label">แนบเอกสาร</div></div>
+    <div class="progress-step" id="step5-indicator"><div class="step-circle">5</div><div class="step-label">ยืนยันส่ง</div></div>
+  </div>
+
+  <form id="applyForm" novalidate>
+
+  <!-- STEP 1 -->
+  <div id="step1" class="step-content">
+    <div class="form-section">
+      <div class="section-header">
+        <div class="icon"><i class="bi bi-card-checklist"></i></div>
+        <div><h2>ประเภทคำขอ</h2><p>เลือกว่าต้องการขอใหม่หรือต่ออายุใบอนุญาต</p></div>
+      </div>
+      <div class="section-body">
+        <div class="req-type-group">
+          <label class="req-type-card">
+            <input type="radio" name="reqType" value="new" checked>
+            <div style="font-size:24px;margin-bottom:6px">📋</div>
+            <div class="label">ขอใบอนุญาตใหม่</div>
+            <div class="sub">สำหรับกิจการที่เพิ่งเริ่มต้น</div>
+          </label>
+          <label class="req-type-card">
+            <input type="radio" name="reqType" value="renew">
+            <div style="font-size:24px;margin-bottom:6px">🔄</div>
+            <div class="label">ต่ออายุใบอนุญาต</div>
+            <div class="sub">สำหรับใบอนุญาตที่ยังไม่หมดอายุ</div>
+          </label>
+          <label class="req-type-card">
+            <input type="radio" name="reqType" value="transfer">
+            <div style="font-size:24px;margin-bottom:6px">📁</div>
+            <div class="label">โอนใบอนุญาต</div>
+            <div class="sub">กรณีเปลี่ยนผู้ประกอบการ</div>
+          </label>
+        </div>
+        <div id="renewalInfo" class="hidden" style="background:#e8f5ee;border:1px solid #a8d5b8;border-radius:8px;padding:14px;font-size:14px;margin-top:12px">
+          <strong style="color:var(--success)">📎 กรณีต่ออายุ:</strong> กรุณาแนบสำเนาใบอนุญาตเดิมในขั้นตอนแนบเอกสาร
+          <div class="mt-2"><input type="text" class="form-control" placeholder="เลขที่ใบอนุญาตเดิม (ถ้ามี)" id="oldLicenseNo"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-header">
+        <div class="icon"><i class="bi bi-person-fill"></i></div>
+        <div><h2>ผู้ยื่นคำขอ</h2><p>เลือกว่าเป็นผู้ยื่นเองหรือมอบอำนาจ</p></div>
+      </div>
+      <div class="section-body">
+        <div class="type-toggle">
+          <button type="button" class="type-btn active" id="btnSelf" onclick="setApplicantType('self')"><i class="bi bi-person-fill"></i> ยื่นด้วยตนเอง</button>
+          <button type="button" class="type-btn" id="btnDelegate" onclick="setApplicantType('delegate')"><i class="bi bi-people-fill"></i> มอบอำนาจ</button>
+          <button type="button" class="type-btn" id="btnJuristic" onclick="setApplicantType('juristic')"><i class="bi bi-building"></i> นิติบุคคล</button>
+        </div>
+
+        <div style="background:var(--secondary);border-radius:10px;padding:16px 20px;margin-bottom:20px">
+          <div style="font-weight:700;color:var(--primary);margin-bottom:14px;font-size:15px"><i class="bi bi-person-badge-fill me-2"></i>ข้อมูลผู้ขอรับใบอนุญาต (เจ้าของกิจการ)</div>
+          <div class="row g-3">
+            <div class="col-md-3"><label class="form-label">คำนำหน้า <span class="required">*</span></label>
+              <select class="form-select" id="ownerPrefix" required>
+                <option value="">-- เลือก --</option>
+                <option>นาย</option><option>นาง</option><option>นางสาว</option><option>อื่นๆ</option>
+              </select>
+            </div>
+            <div class="col-md-5"><label class="form-label">ชื่อ <span class="required">*</span></label>
+              <input type="text" class="form-control" id="ownerFirstName" placeholder="ชื่อ" required>
+            </div>
+            <div class="col-md-4"><label class="form-label">นามสกุล <span class="required">*</span></label>
+              <input type="text" class="form-control" id="ownerLastName" placeholder="นามสกุล" required>
+            </div>
+            <div class="col-md-3"><label class="form-label">อายุ <span class="required">*</span></label>
+              <input type="number" class="form-control" id="ownerAge" placeholder="ปี" min="18" max="120" required>
+            </div>
+            <div class="col-md-3"><label class="form-label">สัญชาติ <span class="required">*</span></label>
+              <select class="form-select" id="ownerNationality" required>
+                <option value="">-- เลือก --</option>
+                <option selected>ไทย</option><option>ลาว</option><option>พม่า</option><option>อื่นๆ</option>
+              </select>
+            </div>
+            <div class="col-md-6"><label class="form-label">เลขบัตรประจำตัวประชาชน <span class="required">*</span></label>
+              <input type="text" class="form-control" id="ownerIdCard" placeholder="13 หลัก ไม่ต้องใส่ขีด" maxlength="13" required oninput="this.value=this.value.replace(/\D/g,'').slice(0,13)">
+              <div class="invalid-feedback">กรุณากรอกเลขบัตรประชาชน 13 หลัก</div>
+            </div>
+            <div class="col-md-6"><label class="form-label">หมายเลขโทรศัพท์ <span class="required">*</span></label>
+              <input type="tel" class="form-control" id="ownerPhone" placeholder="0XX-XXX-XXXX" required>
+            </div>
+            <div class="col-md-6"><label class="form-label">Line ID (สำหรับรับแจ้งเตือน)</label>
+              <input type="text" class="form-control" id="ownerLine" placeholder="Line ID ของท่าน">
+            </div>
+          </div>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+            <div style="font-weight:600;color:var(--primary-dark);margin-bottom:12px;font-size:14px">ที่อยู่ตามบัตรประชาชน</div>
+            <div class="row g-3">
+              <div class="col-md-3"><label class="form-label">บ้านเลขที่ <span class="required">*</span></label>
+                <input type="text" class="form-control" id="ownerAddrNo" required>
+              </div>
+              <div class="col-md-2"><label class="form-label">หมู่ที่</label>
+                <input type="text" class="form-control" id="ownerAddrMoo" placeholder="เช่น 5">
+              </div>
+              <div class="col-md-3"><label class="form-label">ตรอก/ซอย</label>
+                <input type="text" class="form-control" id="ownerAddrSoi">
+              </div>
+              <div class="col-md-4"><label class="form-label">ถนน</label>
+                <input type="text" class="form-control" id="ownerAddrRoad">
+              </div>
+              <div class="col-md-4"><label class="form-label">แขวง/ตำบล <span class="required">*</span></label>
+                <input type="text" class="form-control" id="ownerAddrTambon" required>
+              </div>
+              <div class="col-md-4"><label class="form-label">เขต/อำเภอ <span class="required">*</span></label>
+                <input type="text" class="form-control" id="ownerAddrAmphoe" required>
+              </div>
+              <div class="col-md-4"><label class="form-label">จังหวัด <span class="required">*</span></label>
+                <input type="text" class="form-control" id="ownerAddrProvince" required>
+              </div>
+              <div class="col-md-3"><label class="form-label">รหัสไปรษณีย์</label>
+                <input type="text" class="form-control" id="ownerAddrZip" maxlength="5">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="delegateSection" class="hidden">
+          <div style="background:#fff8e6;border:1px solid #fcd97d;border-radius:10px;padding:16px 20px;margin-bottom:12px">
+            <div style="font-weight:700;color:var(--warning);margin-bottom:14px;font-size:15px"><i class="bi bi-person-lines-fill me-2"></i>ข้อมูลผู้รับมอบอำนาจ</div>
+            <div class="row g-3">
+              <div class="col-md-3"><label class="form-label">คำนำหน้า</label>
+                <select class="form-select" id="delPrefix"><option value="">-- เลือก --</option><option>นาย</option><option>นาง</option><option>นางสาว</option></select>
+              </div>
+              <div class="col-md-5"><label class="form-label">ชื่อ</label>
+                <input type="text" class="form-control" id="delFirstName" placeholder="ชื่อผู้รับมอบ">
+              </div>
+              <div class="col-md-4"><label class="form-label">นามสกุล</label>
+                <input type="text" class="form-control" id="delLastName">
+              </div>
+              <div class="col-md-5"><label class="form-label">เลขบัตรประจำตัวประชาชน</label>
+                <input type="text" class="form-control" id="delIdCard" placeholder="13 หลัก" maxlength="13">
+              </div>
+              <div class="col-md-4"><label class="form-label">โทรศัพท์</label>
+                <input type="tel" class="form-control" id="delPhone" placeholder="0XX-XXX-XXXX">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="juristicSection" class="hidden">
+          <div style="background:#f0eeff;border:1px solid #c4b5f5;border-radius:10px;padding:16px 20px">
+            <div style="font-weight:700;color:#5b3ee0;margin-bottom:14px;font-size:15px"><i class="bi bi-building me-2"></i>ข้อมูลนิติบุคคล</div>
+            <div class="row g-3">
+              <div class="col-md-6"><label class="form-label">ชื่อนิติบุคคล</label>
+                <input type="text" class="form-control" id="jurName" placeholder="ชื่อบริษัท/ห้างหุ้นส่วน">
+              </div>
+              <div class="col-md-6"><label class="form-label">เลขทะเบียนนิติบุคคล</label>
+                <input type="text" class="form-control" id="jurRegNo">
+              </div>
+              <div class="col-md-6"><label class="form-label">ชื่อผู้มีอำนาจลงนาม</label>
+                <input type="text" class="form-control" id="jurSignatory">
+              </div>
+              <div class="col-md-6"><label class="form-label">ตำแหน่ง</label>
+                <input type="text" class="form-control" id="jurPosition" placeholder="เช่น กรรมการผู้จัดการ">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end">
+      <button type="button" class="btn-submit" onclick="goToStep(2)">ถัดไป <i class="bi bi-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="step2" class="step-content hidden">
+    <div class="form-section">
+      <div class="section-header">
+        <div class="icon"><i class="bi bi-grid-fill"></i></div>
+        <div><h2>ประเภทกิจการ</h2><p>เลือกประเภทกิจการตามลำดับ</p></div>
+      </div>
+      <div class="section-body">
+        <div class="mb-3">
+          <label class="form-label">หมวดกิจการหลัก <span class="required">*</span></label>
+          <select class="form-select" id="bizCategory" onchange="updateBizType()">
+            <option value="">-- กรุณาเลือกหมวดกิจการ --</option>
+            <option value="animal">กิจการที่เกี่ยวกับสัตว์เลี้ยง</option>
+            <option value="animal_product">กิจการที่เกี่ยวกับสัตว์และผลิตภัณฑ์</option>
+            <option value="food">กิจการที่เกี่ยวกับอาหาร เครื่องดื่ม น้ำดื่ม</option>
+            <option value="medicine">กิจการที่เกี่ยวกับยา เวชภัณฑ์ เครื่องสำอาง</option>
+            <option value="agriculture">กิจการที่เกี่ยวกับการเกษตร</option>
+            <option value="metal">กิจการที่เกี่ยวกับโลหะหรือแร่</option>
+            <option value="vehicle">กิจการที่เกี่ยวกับยานยนต์ เครื่องจักร</option>
+            <option value="wood">กิจการที่เกี่ยวกับไม้หรือกระดาษ</option>
+            <option value="service">กิจการที่เกี่ยวกับการบริการ</option>
+            <option value="textile">กิจการที่เกี่ยวกับสิ่งทอ</option>
+            <option value="stone">กิจการที่เกี่ยวกับหิน ดิน ทราย ซีเมนต์</option>
+            <option value="petroleum">กิจการที่เกี่ยวกับปิโตรเลียม สารเคมี</option>
+            <option value="other">กิจการอื่นๆ</option>
+          </select>
+        </div>
+        <div id="bizTypeContainer" class="hidden mb-3">
+          <label class="form-label">ประเภทกิจการ <span class="required">*</span></label>
+          <select class="form-select" id="bizType" onchange="updateBizSubType()">
+            <option value="">-- กรุณาเลือกประเภทกิจการ --</option>
+          </select>
+        </div>
+        <div id="bizSubTypeContainer" class="hidden mb-3">
+          <label class="form-label">รายละเอียดเพิ่มเติม <span class="required">*</span></label>
+          <select class="form-select" id="bizSubType" onchange="updateBizDetail()">
+            <option value="">-- กรุณาเลือกรายละเอียด --</option>
+          </select>
+        </div>
+        <div id="bizDetailContainer" class="hidden mb-3">
+          <label class="form-label">ขนาด / ปริมาณ <span class="required">*</span></label>
+          <select class="form-select" id="bizDetail">
+            <option value="">-- กรุณาเลือก --</option>
+          </select>
+        </div>
+        <div id="villageMeetingAlert" class="hidden" style="background:#fff3cd;border:1px solid #ffc107;border-radius:10px;padding:16px;margin-top:12px">
+          <div style="font-weight:700;color:#664d03;margin-bottom:6px"><i class="bi bi-exclamation-triangle-fill me-2"></i>กิจการนี้ต้องผ่านการประชาคมหมู่บ้านก่อน</div>
+          <p style="font-size:13.5px;color:#664d03;margin:0">กรุณาดำเนินการประชาคมหมู่บ้านและนำหลักฐานแนบมาพร้อมกับคำขอ</p>
+          <div class="mt-2">
+            <label style="font-size:13px;font-weight:600">
+              <input type="checkbox" id="confirmVillageMeeting"> ข้าพเจ้ายืนยันว่าได้ผ่านการประชาคมหมู่บ้านแล้ว
+            </label>
+          </div>
+        </div>
+        <div class="mt-3">
+          <label class="form-label">ชื่อกิจการ / ร้าน</label>
+          <input type="text" class="form-control" id="bizName" placeholder="ชื่อร้านหรือกิจการ">
+        </div>
+        <div class="mt-3">
+          <label class="form-label">รายละเอียดกิจการเพิ่มเติม</label>
+          <textarea class="form-control" id="bizDetail2" rows="3" placeholder="อธิบายลักษณะกิจการโดยย่อ" maxlength="500" oninput="document.getElementById('detailCount').textContent=this.value.length"></textarea>
+          <div class="char-count"><span id="detailCount">0</span>/500</div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <button type="button" class="btn-save-draft" onclick="goToStep(1)"><i class="bi bi-arrow-left me-2"></i>ย้อนกลับ</button>
+      <button type="button" class="btn-submit" onclick="goToStep(3)">ถัดไป <i class="bi bi-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="step3" class="step-content hidden">
+    <div class="form-section">
+      <div class="section-header">
+        <div class="icon"><i class="bi bi-geo-alt-fill"></i></div>
+        <div><h2>ที่อยู่สถานประกอบการ</h2><p>ที่ตั้งของกิจการในพื้นที่เทศบาลตำบลสันทราย</p></div>
+      </div>
+      <div class="section-body">
+        <div class="autofill-banner">
+          <i class="bi bi-magic" style="color:var(--primary-light);font-size:20px"></i>
+          <div>
+            <strong>กรอกอัตโนมัติ</strong> — หากสถานประกอบการตรงกับที่อยู่เจ้าของกิจการ
+            <button type="button" onclick="autofillAddress()" style="background:var(--primary);color:white;border:none;padding:5px 14px;border-radius:6px;font-size:13px;font-weight:600;cursor:pointer;margin-left:12px">
+              <i class="bi bi-copy me-1"></i>คัดลอกที่อยู่
+            </button>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-3"><label class="form-label">บ้านเลขที่ <span class="required">*</span></label>
+            <input type="text" class="form-control" id="bizAddrNo" required>
+          </div>
+          <div class="col-md-2"><label class="form-label">หมู่ที่</label>
+            <input type="text" class="form-control" id="bizAddrMoo">
+          </div>
+          <div class="col-md-3"><label class="form-label">ซอย</label>
+            <input type="text" class="form-control" id="bizAddrSoi">
+          </div>
+          <div class="col-md-4"><label class="form-label">ถนน</label>
+            <input type="text" class="form-control" id="bizAddrRoad">
+          </div>
+          <div class="col-md-4"><label class="form-label">ตำบล <span class="required">*</span></label>
+            <select class="form-select" id="bizAddrTambon" required>
+              <option value="">-- เลือกตำบล --</option>
+              <option value="สันทราย" selected>สันทราย</option>
+              <option value="ท่าสาย">ท่าสาย</option>
+              <option value="บ้านดู่">บ้านดู่</option>
+            </select>
+          </div>
+          <div class="col-md-4"><label class="form-label">อำเภอ</label>
+            <input type="text" class="form-control" id="bizAddrAmphoe" value="เมืองเชียงราย" readonly style="background:var(--gray-50)">
+          </div>
+          <div class="col-md-4"><label class="form-label">จังหวัด</label>
+            <input type="text" class="form-control" id="bizAddrProvince" value="เชียงราย" readonly style="background:var(--gray-50)">
+          </div>
+          <div class="col-md-3"><label class="form-label">รหัสไปรษณีย์</label>
+            <input type="text" class="form-control" id="bizAddrZip" maxlength="5" placeholder="57000">
+          </div>
+          <div class="col-md-5"><label class="form-label">เบอร์โทรศัพท์สถานประกอบการ</label>
+            <input type="tel" class="form-control" id="bizPhone" placeholder="053-XXX-XXX">
+          </div>
+        </div>
+        <div class="mt-4 pt-3" style="border-top:1px solid var(--border)">
+          <label class="form-label">พิกัด GPS (ถ้ามี)</label>
+          <div class="row g-2">
+            <div class="col-md-4"><input type="text" class="form-control" id="bizLat" placeholder="Latitude เช่น 19.9107"></div>
+            <div class="col-md-4"><input type="text" class="form-control" id="bizLng" placeholder="Longitude เช่น 99.8318"></div>
+            <div class="col-md-4">
+              <button type="button" onclick="getLocation()" style="background:var(--primary);color:white;border:none;padding:10px 16px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;width:100%">
+                <i class="bi bi-geo-alt-fill me-2"></i>รับตำแหน่งปัจจุบัน
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <button type="button" class="btn-save-draft" onclick="goToStep(2)"><i class="bi bi-arrow-left me-2"></i>ย้อนกลับ</button>
+      <button type="button" class="btn-submit" onclick="goToStep(4)">ถัดไป <i class="bi bi-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div id="step4" class="step-content hidden">
+    <div class="form-section">
+      <div class="section-header">
+        <div class="icon"><i class="bi bi-paperclip"></i></div>
+        <div><h2>แนบเอกสารประกอบคำขอ</h2><p>ไฟล์ PDF, JPG, PNG ขนาดไม่เกิน 5MB</p></div>
+      </div>
+      <div class="section-body">
+        <div class="file-upload-grid">
+          <div class="file-upload-item" id="item1" onclick="triggerFile('doc1')">
+            <div class="file-required-badge">จำเป็น</div>
+            <div class="file-upload-icon">🪪</div>
+            <div class="file-upload-title">สำเนาบัตรประจำตัวประชาชน ของผู้ขอรับใบอนุญาต</div>
+            <div class="file-name-preview" id="prev1"></div>
+            <input type="file" id="doc1" accept=".pdf,.jpg,.jpeg,.png" onchange="fileSelected(this,'prev1','item1')">
+          </div>
+          <div class="file-upload-item" id="item2" onclick="triggerFile('doc2')">
+            <div class="file-required-badge">จำเป็น</div>
+            <div class="file-upload-icon">🏠</div>
+            <div class="file-upload-title">สำเนาทะเบียนบ้าน ของผู้ขอรับใบอนุญาต</div>
+            <div class="file-name-preview" id="prev2"></div>
+            <input type="file" id="doc2" accept=".pdf,.jpg,.jpeg,.png" onchange="fileSelected(this,'prev2','item2')">
+          </div>
+          <div class="file-upload-item" id="item3" onclick="triggerFile('doc3')">
+            <div class="file-optional-badge">ถ้ามี</div>
+            <div class="file-upload-icon">📋</div>
+            <div class="file-upload-title">สำเนาใบอนุญาตเดิม (กรณีขอต่อ)</div>
+            <div class="file-name-preview" id="prev3"></div>
+            <input type="file" id="doc3" accept=".pdf,.jpg,.jpeg,.png" onchange="fileSelected(this,'prev3','item3')">
+          </div>
+          <div class="file-upload-item" id="item4" onclick="triggerFile('doc4')">
+            <div class="file-optional-badge">ถ้าใช้ตัวแทน</div>
+            <div class="file-upload-icon">📝</div>
+            <div class="file-upload-title">หนังสือมอบอำนาจ</div>
+            <div class="file-name-preview" id="prev4"></div>
+            <input type="file" id="doc4" accept=".pdf,.jpg,.jpeg,.png" onchange="fileSelected(this,'prev4','item4')">
+          </div>
+          <div class="file-upload-item" id="item5" onclick="triggerFile('doc5')">
+            <div class="file-optional-badge">ถ้าใช้ตัวแทน</div>
+            <div class="file-upload-icon">🪪</div>
+            <div class="file-upload-title">สำเนาบัตรประจำตัวประชาชน ของผู้รับมอบ</div>
+            <div class="file-name-preview" id="prev5"></div>
+            <input type="file" id="doc5" accept=".pdf,.jpg,.jpeg,.png" onchange="fileSelected(this,'prev5','item5')">
+          </div>
+          <div class="file-upload-item" id="item6" onclick="triggerFile('doc6')">
+            <div class="file-optional-badge">นิติบุคคล</div>
+            <div class="file-upload-icon">🏢</div>
+            <div class="file-upload-title">สำเนาหนังสือรับรองการจดทะเบียนนิติบุคคล</div>
+            <div class="file-name-preview" id="prev6"></div>
+            <input type="file" id="doc6" accept=".pdf,.jpg,.jpeg,.png" onchange="fileSelected(this,'prev6','item6')">
+          </div>
+          <div class="file-upload-item" id="item7" onclick="triggerFile('doc7')">
+            <div class="file-optional-badge">ถ้ามี</div>
+            <div class="file-upload-icon">📁</div>
+            <div class="file-upload-title">เอกสารและหลักฐานอื่นๆ</div>
+            <div class="file-name-preview" id="prev7"></div>
+            <input type="file" id="doc7" accept=".pdf,.jpg,.jpeg,.png" multiple onchange="fileSelected(this,'prev7','item7')">
+          </div>
+        </div>
+        <div style="background:var(--secondary);border-radius:10px;padding:14px 18px;margin-top:20px;font-size:13px">
+          <strong style="color:var(--primary)">📌 หมายเหตุ:</strong> ไฟล์ต้องมีขนาดไม่เกิน 5MB ต่อไฟล์ รองรับ PDF, JPG, PNG
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <button type="button" class="btn-save-draft" onclick="goToStep(3)"><i class="bi bi-arrow-left me-2"></i>ย้อนกลับ</button>
+      <button type="button" class="btn-submit" onclick="goToStep(5)">ถัดไป <i class="bi bi-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div id="step5" class="step-content hidden">
+    <div class="form-section">
+      <div class="section-header">
+        <div class="icon"><i class="bi bi-check-circle-fill"></i></div>
+        <div><h2>ตรวจสอบและยืนยันข้อมูล</h2><p>กรุณาตรวจสอบข้อมูลก่อนส่งคำขอ</p></div>
+      </div>
+      <div class="section-body">
+        <div id="summaryContent"></div>
+        <div class="mt-4 p-3" style="background:var(--secondary);border-radius:10px">
+          <h6 style="font-weight:700;color:var(--primary-dark)">📱 ช่องทางรับแจ้งเตือน LINE</h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">LINE ID ของท่าน (สำหรับรับแจ้งเตือน)</label>
+              <input type="text" class="form-control" id="confirmLineId" placeholder="LINE ID ของท่าน (ถ้ามี)">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">อีเมล (สำรอง)</label>
+              <input type="email" class="form-control" id="confirmEmail" placeholder="email@example.com">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="submit-section">
+      <div class="mb-4">
+        <div class="form-check mb-2">
+          <input type="checkbox" id="termCheck1" class="form-check-input">
+          <label class="form-check-label" for="termCheck1" style="font-size:14px">
+            ข้าพเจ้าขอรับรองว่าข้อมูลที่กรอกในแบบคำขอฉบับนี้เป็นความจริงทุกประการ
+          </label>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" id="termCheck2" class="form-check-input">
+          <label class="form-check-label" for="termCheck2" style="font-size:14px">
+            ข้าพเจ้ายินยอมให้เทศบาลตำบลสันทรายตรวจสอบสถานที่ประกอบกิจการ
+          </label>
+        </div>
+      </div>
+      <div class="d-flex gap-3 justify-content-between flex-wrap">
+        <button type="button" class="btn-save-draft" onclick="goToStep(4)"><i class="bi bi-arrow-left me-2"></i>ย้อนกลับ</button>
+        <button type="button" class="btn-submit" onclick="submitForm()">
+          <i class="bi bi-send-fill me-2"></i>ส่งคำขอ
+        </button>
+      </div>
+    </div>
+  </div>
+
+  </form>
+</div>
+
+<footer style="background:var(--primary-dark);color:rgba(255,255,255,0.6);text-align:center;padding:20px;font-size:13px">
+  © 2568 เทศบาลตำบลสันทราย | กองสาธารณสุขและสิ่งแวดล้อม | โทร. 053-XXX-XXX
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+
+// ============================================================
+// CONFIG — ใส่ URL ของ Apps Script ที่นี่
+// ============================================================
+const API_URL = 'https://script.google.com/macros/s/AKfycbxA6byQdKbR8NOvWXiomgEsVZW_EvGUmXXk0VCjK2CiDwF14kfU0qaFVaVjeuFb0Ne7/exec';
+
+// ============================================================
+// BUSINESS TYPE DATA
+// ============================================================
+const bizData = {
+  animal: {
+    types: [
+      { val:'breeding', label:'การเพาะพันธุ์ เลี้ยง และการอนุบาลสัตว์ทุกชนิด', village:false,
+        subtypes:[
+          { val:'cattle', label:'ม้า โค กระบือ', details:['จำนวน 10 - 30 ตัว','จำนวน 31 - 50 ตัว','จำนวนตั้งแต่ 51 ตัว ขึ้นไป'] },
+          { val:'pig', label:'สุกร', village:true, details:['จำนวน 10 - 20 ตัว','จำนวน 21 - 50 ตัว','จำนวนตั้งแต่ 51 ตัว ขึ้นไป'] },
+          { val:'goat', label:'แพะ แกะ สุนัข', details:['จำนวน 10 - 20 ตัว','จำนวน 21 - 50 ตัว','จำนวนตั้งแต่ 51 ตัว ขึ้นไป'] },
+          { val:'poultry', label:'ไก่ เป็ด ห่าน นก', details:['จำนวน 100 - 500 ตัว','จำนวน 501 - 5,000 ตัว','จำนวน 5,001 - 10,000 ตัว','จำนวนตั้งแต่ 10,001 ตัว ขึ้นไป'] },
+          { val:'aqua', label:'สัตว์น้ำ', details:['พื้นที่เลี้ยง 3 - 25 ไร่','พื้นที่เลี้ยงตั้งแต่ 25 ไร่ ขึ้นไป'] },
+          { val:'reptile', label:'สัตว์เลื้อยคลาน หรือแมลง', details:[] },
+        ]
+      },
+      { val:'zoo', label:'การประกอบกิจการเลี้ยง รวบรวมสัตว์เพื่อให้ประชาชนเข้าชม', village:false, subtypes:[] },
+    ]
+  },
+  food: {
+    types: [
+      { val:'sauce', label:'การผลิต สะสม หรือแบ่งบรรจุ น้ำพริกแกง น้ำพริกปรุงสำเร็จ เต้าเจี้ยว ซีอิ้ว น้ำจิ้ม ซอสปรุงรส', subtypes:[], details:[] },
+      { val:'ferment_animal', label:'การผลิต สะสม อาหารหมัก ดอง จากสัตว์ (ปลาร้า ปลาส้ม แหนม ไส้กรอก กะปิ น้ำปลา)', subtypes:[], details:[] },
+      { val:'ferment_veg', label:'การผลิต สะสม อาหารหมัก ดอง จากผัก ผลไม้', subtypes:[], details:[] },
+      { val:'food_process', label:'การผลิต สะสม อาหารจากพืชหรือสัตว์ (ตาก บด นึ่ง ต้ม ทอด อบรมควัน)', subtypes:[], details:[] },
+      { val:'meatball', label:'การผลิต สะสม หรือแบ่งบรรจุลูกชิ้น', subtypes:[], details:[] },
+      { val:'noodle', label:'การผลิต สะสม เส้นหมี่ ขนมจีน ก๋วยเตี๋ยว เต้าฮวย เต้าหู้', subtypes:[], details:[] },
+      { val:'bakery', label:'การผลิต ขนมปัง จันอับ ขนมเปี๊ยะ ขนมอบ', subtypes:[], details:['โดยไม่ใช้เครื่องจักร','โดยใช้เครื่องจักร'] },
+      { val:'dairy', label:'การผลิต สะสม น้ำนม หรือผลิตภัณฑ์จากน้ำนมสัตว์', subtypes:[], details:[] },
+      { val:'icecream', label:'การผลิตไอศกรีม', subtypes:[], details:[] },
+      { val:'coffee', label:'การคั่ว สะสม หรือแบ่งบรรจุกาแฟ', subtypes:[], details:[] },
+      { val:'water', label:'การผลิตน้ำกลั่น น้ำบริโภค น้ำดื่มจากเครื่องจำหน่ายอัตโนมัติ', subtypes:[], details:['การผลิตน้ำกลั่น น้ำบริโภค','การผลิตน้ำดื่มจากเครื่องจำหน่ายอัตโนมัติ'] },
+      { val:'ice', label:'การผลิต สะสม แบ่งบรรจุ หรือขนส่งน้ำแข็ง', subtypes:[], details:['การผลิตน้ำแข็ง','สะสม แบ่งบรรจุ หรือขนส่งน้ำแข็ง'] },
+      { val:'beverage', label:'การผลิต สะสม น้ำอัดลม น้ำหวาน น้ำโซดา เครื่องดื่มบรรจุขวด', subtypes:[], details:['โดยไม่ใช้เครื่องจักร','โดยใช้เครื่องจักร'] },
+    ]
+  },
+  service: {
+    types: [
+      { val:'spa', label:'การประกอบกิจการสปาเพื่อสุขภาพ', subtypes:[], details:[] },
+      { val:'massage', label:'การประกอบกิจการอาบ อบ นวด', subtypes:[], details:[] },
+      { val:'health_massage', label:'การประกอบกิจการนวดเพื่อสุขภาพ', subtypes:[], details:[] },
+      { val:'sauna', label:'การประกอบกิจการอาบน้ำ อบไอน้ำ อบสมุนไพร', subtypes:[], details:['พื้นที่ ต่ำกว่า 200 ตารางเมตร','พื้นที่ ตั้งแต่ 200 ตารางเมตร ขึ้นไป'] },
+      { val:'hotel', label:'การประกอบกิจการโรงแรม สถานที่พักชั่วคราว', subtypes:[], details:['ห้องพัก ไม่เกิน 10 ห้อง','ห้องพัก ตั้งแต่ 11 - 20 ห้อง','ห้องพัก มากกว่า 30 ห้อง ขึ้นไป'] },
+      { val:'dorm', label:'การประกอบกิจการหอพัก อาคารชุดให้เช่า ห้องเช่า', subtypes:[], details:['ห้องพัก ไม่เกิน 5 ห้อง','ห้องพัก ตั้งแต่ 6 - 10 ห้อง','ห้องพัก ตั้งแต่ 11 - 30 ห้อง','ห้องพัก มากกว่า 30 ห้อง ขึ้นไป'] },
+      { val:'entertainment', label:'การจัดให้มีมหรสพ ดนตรี เต้นรำ ดิสโกเทก คาราโอเกะ', subtypes:[], details:[] },
+      { val:'pool', label:'การประกอบกิจการสระว่ายน้ำ', subtypes:[], details:[] },
+      { val:'beauty', label:'การประกอบกิจการเสริมสวย หรือแต่งผม', subtypes:[], details:[] },
+      { val:'gym', label:'การประกอบกิจการสถานที่ออกกำลังกาย', subtypes:[], details:[] },
+      { val:'amusement', label:'การประกอบกิจการสวนสนุก โบว์ลิ่ง หรือตู้เกม', subtypes:[], details:['กิจการสวนสนุก โบว์ลิ่ง','กิจการตู้เกม เครื่องเล่นเกม'] },
+      { val:'computer', label:'การประกอบกิจการให้บริการคอมพิวเตอร์', subtypes:[], details:[] },
+      { val:'tattoo', label:'การประกอบกิจการสักผิวหนัง หรือเจาะร่างกาย', subtypes:[], details:[] },
+      { val:'petshop', label:'การประกอบกิจการสปา อาบน้ำ ตัดขน รับเลี้ยงสัตว์', subtypes:[], details:[] },
+    ]
+  },
+  vehicle: {
+    types: [
+      { val:'body', label:'การต่อ ประกอบ เคาะ ปะผุ พ่นสี ยานยนต์', village:true, subtypes:[], details:['พื้นที่ ต่ำกว่า 200 ตารางเมตร','พื้นที่ ตั้งแต่ 200 ตารางเมตร ขึ้นไป'] },
+      { val:'repair', label:'การซ่อม การปรับแต่งเครื่องยนต์ ระบบไฟฟ้า ระบบปรับอากาศ', village:true, subtypes:[], details:[] },
+      { val:'dealership', label:'การประกอบธุรกิจเกี่ยวกับยานยนต์ซึ่งมีการซ่อม', subtypes:[], details:['รถจักรยานยนต์','รถยนต์','เครื่องจักรกล'] },
+      { val:'carwash', label:'การล้าง ขัดสี เคลือบสี หรืออัดฉีดยานยนต์', subtypes:[], details:[] },
+      { val:'battery', label:'การผลิต สะสม จำหน่าย ซ่อม หรืออัดแบตเตอรี่', subtypes:[], details:[] },
+      { val:'tire', label:'การจำหน่าย ซ่อม ปะ เชื่อมยาง หรือตั้งศูนย์ถ่วงล้อ', subtypes:[], details:['รถจักรยานยนต์','รถยนต์'] },
+    ]
+  },
+};
+
+// เพิ่มหมวดอื่นๆ แบบ generic
+['animal_product','medicine','agriculture','metal','wood','textile','stone','petroleum','other'].forEach(function(cat) {
+  if (!bizData[cat]) {
+    bizData[cat] = { types:[{ val:cat+'_gen', label:'กิจการในหมวดนี้ (กรุณาระบุรายละเอียดในช่องด้านล่าง)', subtypes:[], details:[] }] };
+  }
+});
+
+// ============================================================
+// STATE
+// ============================================================
+var currentStep = 1;
+var applicantType = 'self';
+
+// ============================================================
+// APPLICANT TYPE TOGGLE
+// ============================================================
+function setApplicantType(type) {
+  applicantType = type;
+  document.getElementById('btnSelf').classList.remove('active');
+  document.getElementById('btnDelegate').classList.remove('active');
+  document.getElementById('btnJuristic').classList.remove('active');
+  document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('active');
+  document.getElementById('delegateSection').classList.add('hidden');
+  document.getElementById('juristicSection').classList.add('hidden');
+  if (type === 'delegate') document.getElementById('delegateSection').classList.remove('hidden');
+  if (type === 'juristic') document.getElementById('juristicSection').classList.remove('hidden');
+}
+
+// reqType change
+document.querySelectorAll('input[name="reqType"]').forEach(function(r) {
+  r.addEventListener('change', function() {
+    var info = document.getElementById('renewalInfo');
+    if (this.value === 'renew') {
+      info.classList.remove('hidden');
+    } else {
+      info.classList.add('hidden');
+    }
+  });
+});
+
+// ============================================================
+// BUSINESS TYPE CASCADE
+// ============================================================
+function updateBizType() {
+  var cat = document.getElementById('bizCategory').value;
+  var typeSelect = document.getElementById('bizType');
+  var container = document.getElementById('bizTypeContainer');
+  document.getElementById('bizSubTypeContainer').classList.add('hidden');
+  document.getElementById('bizDetailContainer').classList.add('hidden');
+  document.getElementById('villageMeetingAlert').classList.add('hidden');
+  if (!cat || !bizData[cat]) { container.classList.add('hidden'); return; }
+  container.classList.remove('hidden');
+  typeSelect.innerHTML = '<option value="">-- กรุณาเลือกประเภทกิจการ --</option>';
+  bizData[cat].types.forEach(function(t) {
+    var opt = document.createElement('option');
+    opt.value = t.val;
+    opt.textContent = t.label;
+    typeSelect.appendChild(opt);
+  });
+}
+
+function updateBizSubType() {
+  var cat = document.getElementById('bizCategory').value;
+  var typeVal = document.getElementById('bizType').value;
+  if (!cat || !typeVal) return;
+  var typeObj = null;
+  bizData[cat].types.forEach(function(t) { if (t.val === typeVal) typeObj = t; });
+  if (!typeObj) return;
+  if (typeObj.village) {
+    document.getElementById('villageMeetingAlert').classList.remove('hidden');
+  } else {
+    document.getElementById('villageMeetingAlert').classList.add('hidden');
+  }
+  var subContainer = document.getElementById('bizSubTypeContainer');
+  var detContainer = document.getElementById('bizDetailContainer');
+  if (typeObj.subtypes && typeObj.subtypes.length > 0) {
+    subContainer.classList.remove('hidden');
+    var sub = document.getElementById('bizSubType');
+    sub.innerHTML = '<option value="">-- กรุณาเลือก --</option>';
+    typeObj.subtypes.forEach(function(s) {
+      var opt = document.createElement('option');
+      opt.value = s.val;
+      opt.textContent = s.label;
+      sub.appendChild(opt);
+    });
+    detContainer.classList.add('hidden');
+  } else if (typeObj.details && typeObj.details.length > 0) {
+    subContainer.classList.add('hidden');
+    detContainer.classList.remove('hidden');
+    var det = document.getElementById('bizDetail');
+    det.innerHTML = '<option value="">-- กรุณาเลือก --</option>';
+    typeObj.details.forEach(function(d) {
+      var opt = document.createElement('option');
+      opt.value = d; opt.textContent = d; det.appendChild(opt);
+    });
+  } else {
+    subContainer.classList.add('hidden');
+    detContainer.classList.add('hidden');
+  }
+}
+
+function updateBizDetail() {
+  var cat = document.getElementById('bizCategory').value;
+  var typeVal = document.getElementById('bizType').value;
+  var subVal = document.getElementById('bizSubType').value;
+  if (!subVal) return;
+  var typeObj = null;
+  bizData[cat].types.forEach(function(t) { if (t.val === typeVal) typeObj = t; });
+  if (!typeObj) return;
+  var subObj = null;
+  if (typeObj.subtypes) typeObj.subtypes.forEach(function(s) { if (s.val === subVal) subObj = s; });
+  if (!subObj) return;
+  if (subObj.village) document.getElementById('villageMeetingAlert').classList.remove('hidden');
+  var detContainer = document.getElementById('bizDetailContainer');
+  if (subObj.details && subObj.details.length > 0) {
+    detContainer.classList.remove('hidden');
+    var det = document.getElementById('bizDetail');
+    det.innerHTML = '<option value="">-- กรุณาเลือก --</option>';
+    subObj.details.forEach(function(d) {
+      var opt = document.createElement('option');
+      opt.value = d; opt.textContent = d; det.appendChild(opt);
+    });
+  } else {
+    detContainer.classList.add('hidden');
+  }
+}
+
+// ============================================================
+// STEP NAVIGATION
+// ============================================================
+function goToStep(n) {
+  if (n > currentStep && !validateStep(currentStep)) return;
+  document.querySelectorAll('.step-content').forEach(function(s) { s.classList.add('hidden'); });
+  document.getElementById('step' + n).classList.remove('hidden');
+  for (var i = 1; i <= 5; i++) {
+    var ind = document.getElementById('step' + i + '-indicator');
+    ind.classList.remove('active', 'done');
+    if (i < n) { ind.classList.add('done'); ind.querySelector('.step-circle').innerHTML = '✓'; }
+    else { ind.querySelector('.step-circle').textContent = i; }
+    if (i === n) ind.classList.add('active');
+  }
+  currentStep = n;
+  if (n === 5) buildSummary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================================
+// VALIDATION
+// ============================================================
+function validateStep(step) {
+  if (step === 1) {
+    var fname = document.getElementById('ownerFirstName').value.trim();
+    var lname = document.getElementById('ownerLastName').value.trim();
+    var id = document.getElementById('ownerIdCard').value.trim();
+    var phone = document.getElementById('ownerPhone').value.trim();
+    var addrNo = document.getElementById('ownerAddrNo').value.trim();
+    if (!fname || !lname) {
+      Swal.fire({ icon:'warning', title:'กรุณากรอกชื่อ-นามสกุล', confirmButtonColor:'#1a3a6b' });
+      return false;
+    }
+    if (id.length !== 13) {
+      Swal.fire({ icon:'warning', title:'เลขบัตรประชาชนไม่ถูกต้อง', text:'กรุณากรอกเลขบัตรประชาชน 13 หลัก', confirmButtonColor:'#1a3a6b' });
+      return false;
+    }
+    if (!phone) {
+      Swal.fire({ icon:'warning', title:'กรุณากรอกเบอร์โทรศัพท์', confirmButtonColor:'#1a3a6b' });
+      return false;
+    }
+    if (!addrNo) {
+      Swal.fire({ icon:'warning', title:'กรุณากรอกบ้านเลขที่', confirmButtonColor:'#1a3a6b' });
+      return false;
+    }
+  }
+  if (step === 2) {
+    if (!document.getElementById('bizCategory').value) {
+      Swal.fire({ icon:'warning', title:'กรุณาเลือกประเภทกิจการ', confirmButtonColor:'#1a3a6b' });
+      return false;
+    }
+    var villageAlert = document.getElementById('villageMeetingAlert');
+    if (!villageAlert.classList.contains('hidden') && !document.getElementById('confirmVillageMeeting').checked) {
+      Swal.fire({ icon:'warning', title:'กรุณายืนยันการประชาคมหมู่บ้าน', confirmButtonColor:'#1a3a6b' });
+      return false;
+    }
+  }
+  if (step === 3) {
+    if (!document.getElementById('bizAddrNo').value.trim()) {
+      Swal.fire({ icon:'warning', title:'กรุณากรอกที่อยู่สถานประกอบการ', confirmButtonColor:'#1a3a6b' });
+      return false;
+    }
+  }
+  return true;
+}
+
+// ============================================================
+// UTILITY
+// ============================================================
+function autofillAddress() {
+  document.getElementById('bizAddrNo').value = document.getElementById('ownerAddrNo').value;
+  document.getElementById('bizAddrMoo').value = document.getElementById('ownerAddrMoo').value;
+  document.getElementById('bizAddrSoi').value = document.getElementById('ownerAddrSoi').value;
+  document.getElementById('bizAddrRoad').value = document.getElementById('ownerAddrRoad').value;
+  Swal.fire({ icon:'success', title:'คัดลอกที่อยู่แล้ว', timer:1500, showConfirmButton:false });
+}
+
+function getLocation() {
+  if (!navigator.geolocation) return;
+  navigator.geolocation.getCurrentPosition(function(pos) {
+    document.getElementById('bizLat').value = pos.coords.latitude.toFixed(6);
+    document.getElementById('bizLng').value = pos.coords.longitude.toFixed(6);
+    Swal.fire({ icon:'success', title:'รับตำแหน่งสำเร็จ', timer:1500, showConfirmButton:false });
+  }, function() {
+    Swal.fire({ icon:'error', title:'ไม่สามารถรับตำแหน่งได้', confirmButtonColor:'#1a3a6b' });
+  });
+}
+
+function triggerFile(id) { document.getElementById(id).click(); }
+
+function fileSelected(input, prevId, itemId) {
+  if (input.files.length > 0) {
+    var names = Array.from(input.files).map(function(f) { return f.name; }).join(', ');
+    var prev = document.getElementById(prevId);
+    if (prev) prev.textContent = '✅ ' + names.substring(0, 40) + (names.length > 40 ? '...' : '');
+    document.getElementById(itemId).classList.add('has-file');
+  }
+}
+
+function buildSummary() {
+  var prefix = document.getElementById('ownerPrefix').value;
+  var fname = document.getElementById('ownerFirstName').value;
+  var lname = document.getElementById('ownerLastName').value;
+  var id = document.getElementById('ownerIdCard').value;
+  var phone = document.getElementById('ownerPhone').value;
+  var bizCatEl = document.getElementById('bizCategory');
+  var bizCat = bizCatEl.options[bizCatEl.selectedIndex] ? bizCatEl.options[bizCatEl.selectedIndex].text : '-';
+  var bizTypeEl = document.getElementById('bizType');
+  var bizTypeTxt = bizTypeEl.options[bizTypeEl.selectedIndex] ? bizTypeEl.options[bizTypeEl.selectedIndex].text : '-';
+  var bizName = document.getElementById('bizName').value;
+  var addrNo = document.getElementById('bizAddrNo').value;
+  var tambon = document.getElementById('bizAddrTambon').value;
+  document.getElementById('summaryContent').innerHTML =
+    '<div class="row g-3">' +
+    '<div class="col-md-6"><div style="background:var(--secondary);border-radius:10px;padding:16px">' +
+    '<div style="font-weight:700;color:var(--primary);margin-bottom:12px"><i class="bi bi-person-fill me-2"></i>ผู้ขอรับใบอนุญาต</div>' +
+    '<table style="width:100%;font-size:14px">' +
+    '<tr><td style="color:var(--text-muted);padding:3px 0;width:40%">ชื่อ-นามสกุล</td><td style="font-weight:600">' + prefix + fname + ' ' + lname + '</td></tr>' +
+    '<tr><td style="color:var(--text-muted);padding:3px 0">เลขบัตร ปชช.</td><td>' + id + '</td></tr>' +
+    '<tr><td style="color:var(--text-muted);padding:3px 0">โทรศัพท์</td><td>' + phone + '</td></tr>' +
+    '</table></div></div>' +
+    '<div class="col-md-6"><div style="background:var(--secondary);border-radius:10px;padding:16px">' +
+    '<div style="font-weight:700;color:var(--primary);margin-bottom:12px"><i class="bi bi-grid-fill me-2"></i>ประเภทกิจการ</div>' +
+    '<table style="width:100%;font-size:14px">' +
+    '<tr><td style="color:var(--text-muted);padding:3px 0;width:40%">หมวดหลัก</td><td style="font-weight:600">' + bizCat + '</td></tr>' +
+    '<tr><td style="color:var(--text-muted);padding:3px 0">ประเภท</td><td>' + bizTypeTxt + '</td></tr>' +
+    '<tr><td style="color:var(--text-muted);padding:3px 0">ชื่อกิจการ</td><td>' + (bizName || '-') + '</td></tr>' +
+    '</table></div></div>' +
+    '<div class="col-md-12"><div style="background:var(--secondary);border-radius:10px;padding:16px">' +
+    '<div style="font-weight:700;color:var(--primary);margin-bottom:8px"><i class="bi bi-geo-alt-fill me-2"></i>สถานประกอบการ</div>' +
+    '<div style="font-size:14px">' + addrNo + ' ต.' + tambon + ' อ.เมืองเชียงราย จ.เชียงราย</div>' +
+    '</div></div></div>';
+}
+
+// ============================================================
+// SUBMIT — ส่งข้อมูลจริงไปยัง Apps Script
+// ============================================================
+async function submitForm() {
+  if (!document.getElementById('termCheck1').checked || !document.getElementById('termCheck2').checked) {
+    Swal.fire({ icon:'warning', title:'กรุณายืนยันข้อมูล', text:'กรุณาติ๊กยืนยันทั้ง 2 ข้อก่อนส่งคำขอ', confirmButtonColor:'#1a3a6b' });
+    return;
+  }
+
+  Swal.fire({
+    title: '⏳ กำลังส่งคำขอ...',
+    text: 'กรุณารอสักครู่',
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    didOpen: function() { Swal.showLoading(); }
+  });
+
+  var bizCatEl = document.getElementById('bizCategory');
+  var bizTypeEl = document.getElementById('bizType');
+  var bizSubEl = document.getElementById('bizSubType');
+  var bizDetEl = document.getElementById('bizDetail');
+
+  var formData = {
+    action: 'submit',
+    reqType: (document.querySelector('input[name="reqType"]:checked') || {}).value || 'new',
+    ownerPrefix:       document.getElementById('ownerPrefix').value,
+    ownerFirstName:    document.getElementById('ownerFirstName').value,
+    ownerLastName:     document.getElementById('ownerLastName').value,
+    ownerAge:          document.getElementById('ownerAge').value,
+    ownerNationality:  document.getElementById('ownerNationality').value,
+    ownerIdCard:       document.getElementById('ownerIdCard').value,
+    ownerPhone:        document.getElementById('ownerPhone').value,
+    ownerLine:         document.getElementById('ownerLine').value || '',
+    ownerAddrNo:       document.getElementById('ownerAddrNo').value,
+    ownerAddrMoo:      document.getElementById('ownerAddrMoo').value || '',
+    ownerAddrSoi:      document.getElementById('ownerAddrSoi').value || '',
+    ownerAddrRoad:     document.getElementById('ownerAddrRoad').value || '',
+    ownerAddrTambon:   document.getElementById('ownerAddrTambon').value,
+    ownerAddrAmphoe:   document.getElementById('ownerAddrAmphoe').value,
+    ownerAddrProvince: document.getElementById('ownerAddrProvince').value,
+    ownerAddrZip:      document.getElementById('ownerAddrZip').value || '',
+    bizCategory:     bizCatEl.value,
+    bizCategoryText: bizCatEl.options[bizCatEl.selectedIndex] ? bizCatEl.options[bizCatEl.selectedIndex].text : '',
+    bizType:         bizTypeEl.value || '',
+    bizTypeText:     bizTypeEl.options[bizTypeEl.selectedIndex] ? bizTypeEl.options[bizTypeEl.selectedIndex].text : '',
+    bizSubType:      bizSubEl.value || '',
+    bizDetail:       bizDetEl.value || '',
+    bizName:         document.getElementById('bizName').value || '',
+    bizDetail2:      document.getElementById('bizDetail2').value || '',
+    bizAddrNo:       document.getElementById('bizAddrNo').value,
+    bizAddrMoo:      document.getElementById('bizAddrMoo').value || '',
+    bizAddrSoi:      document.getElementById('bizAddrSoi').value || '',
+    bizAddrRoad:     document.getElementById('bizAddrRoad').value || '',
+    bizAddrTambon:   document.getElementById('bizAddrTambon').value,
+    bizAddrAmphoe:   document.getElementById('bizAddrAmphoe').value,
+    bizAddrProvince: document.getElementById('bizAddrProvince').value,
+    bizAddrZip:      document.getElementById('bizAddrZip').value || '',
+    bizPhone:        document.getElementById('bizPhone').value || '',
+    bizLat:          document.getElementById('bizLat').value || '',
+    bizLng:          document.getElementById('bizLng').value || '',
+    notifyLine:      document.getElementById('confirmLineId').value || '',
+    notifyEmail:     document.getElementById('confirmEmail').value || '',
+  };
+
+  try {
+    var response = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(formData)
+    });
+    var result = await response.json();
+
+    if (result.success) {
+      Swal.fire({
+        icon: 'success',
+        title: '✅ ส่งคำขอสำเร็จ!',
+        html: '<div style="text-align:left;font-family:Sarabun,sans-serif">' +
+              '<div style="background:#e8f5ee;border-radius:10px;padding:16px;margin-bottom:16px;text-align:center">' +
+              '<div style="font-size:13px;color:#6b7a99">เลขที่คำขอของท่าน</div>' +
+              '<div style="font-size:32px;font-weight:800;color:#1a3a6b">' + result.reqNo + '</div>' +
+              '<div style="font-size:12px;color:#6b7a99;margin-top:4px">กรุณาจดจำหรือถ่ายภาพไว้</div>' +
+              '</div>' +
+              '<div style="font-size:14px;line-height:2">' +
+              '📱 ส่ง LINE แจ้งเจ้าหน้าที่แล้ว<br>' +
+              '⏰ เจ้าหน้าที่จะตรวจสอบใน 1-3 วันทำการ<br>' +
+              '🔍 ใช้เลขที่คำขอนี้ตรวจสอบสถานะได้' +
+              '</div></div>',
+        confirmButtonText: 'ตกลง',
+        confirmButtonColor: '#1a3a6b',
+      }).then(function() {
+        window.location.href = 'index.html';
+      });
+    } else {
+      throw new Error(result.message || 'เกิดข้อผิดพลาดจากเซิร์ฟเวอร์');
+    }
+  } catch (error) {
+    Swal.fire({
+      icon: 'error',
+      title: '❌ ส่งคำขอไม่สำเร็จ',
+      html: '<div style="font-family:Sarabun,sans-serif;font-size:14px">' +
+            'เกิดข้อผิดพลาด: ' + error.message + '<br><br>' +
+            'กรุณาลองใหม่อีกครั้ง หรือติดต่อเจ้าหน้าที่<br>' +
+            '<strong>โทร. 053-XXX-XXX</strong></div>',
+      confirmButtonColor: '#1a3a6b'
+    });
+  }
+}
+
+</script>
+</body>
+</html>
